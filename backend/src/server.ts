@@ -1,11 +1,11 @@
 import app from './app';
-import dotenv from 'dotenv';
 import { setupSwaggerDocs } from './swagger';
+import { PORT } from './config/env.check';
+import connectDB from './config/db';
 
+// Connect to MongoDB
+connectDB();
 
-dotenv.config();
-
-const PORT = process.env.PORT || 3000;
 
 setupSwaggerDocs(app);
 app.listen(PORT, () => {

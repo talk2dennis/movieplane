@@ -2,8 +2,8 @@ import express from 'express';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cors from 'cors';
-import dotenv from 'dotenv';
-dotenv.config();
+import { CORS_ORIGIN } from './config/env.check';
+import authRoutes from './routes/auth.routes';
 
 
 const app = express();
@@ -14,7 +14,7 @@ app.use(morgan('dev'));
 app.use(helmet());
 app.use(cors(
     {
-        origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+        origin: CORS_ORIGIN,
         methods: ['GET', 'POST', 'PUT', 'DELETE'],
         credentials: true, // Allow credentials
     }
@@ -24,5 +24,8 @@ app.use(cors(
 app.get('/status', (req, res) => {
     res.status(200).json({ status: 'OK' });
 });
+
+// use auth routes
+app.use('/api/auth', authRoutes);
 
 export default app;
