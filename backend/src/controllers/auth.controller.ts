@@ -11,11 +11,6 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
         const { username, email, password } = req.body;
         console.log(req.body);
 
-        // Validate input
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: "Username, email, and password are required" });
-        }
-
         // Check if user already exists
         const existingUser = await User.find({ $or: [{ username }, { email }] });
         if (existingUser.length > 0) {
@@ -49,11 +44,6 @@ export const registerUser = async (req: Request, res: Response, next: NextFuncti
 export const loginUser = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const { email, password } = req.body;
-
-        // Validate input
-        if (!email || !password) {
-            return res.status(400).json({ message: "Email and password are required" });
-        }
 
         // Find user by email
         const user = await User.findOne({ email }).select('+password_hash');
@@ -113,11 +103,6 @@ export const updateUserById = async (req: Request, res: Response, next: NextFunc
     try {
         const userId = req.params.id;
         const { username, email, password } = req.body;
-
-        // Validate input
-        if (!username || !email || !password) {
-            return res.status(400).json({ message: "Username, email, and password are required" });
-        }
 
         // Find user by id
         const user = await User.findById(userId);

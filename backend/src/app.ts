@@ -4,6 +4,7 @@ import morgan from 'morgan';
 import cors from 'cors';
 import { CORS_ORIGIN } from './config/env.check';
 import authRoutes from './routes/auth.routes';
+import userRouter from './routes/user.routes';
 
 
 const app = express();
@@ -27,5 +28,8 @@ app.get('/status', (req, res) => {
 
 // use auth routes
 app.use('/api/auth', authRoutes);
+
+// use users routes
+app.use('/api/users', userRouter);
 
 export default app;
