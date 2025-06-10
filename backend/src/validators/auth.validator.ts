@@ -53,16 +53,15 @@ export const updateValidation = [
         .matches(/[^A-Za-z0-9]/).withMessage('Password must contain at least one special character'),
     
     param('id')
-    .notEmpty().withMessage("id is required")
     .isMongoId().withMessage('Invalid User ID format')
 ];
 
 export const getUserValidation = [
-    param('id').notEmpty().withMessage("Id is required")
+    param('id')
     .isMongoId().withMessage('Invalid User ID format')
 ];
 
 export const deleteUserValidation = [
-    param('id').notEmpty().withMessage("id is required")
+    param('id')
     .isMongoId().withMessage('Invalid User ID format')
 ];
