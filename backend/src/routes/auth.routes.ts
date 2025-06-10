@@ -1,7 +1,8 @@
 import { Router } from "express";
-import { registerUser, loginUser, getAllUsers } from "../controllers/auth.controller";
+import { registerUser, loginUser, getCurrentUser } from "../controllers/auth.controller";
 import { registerValidation, loginValidation } from "../validators/auth.validator";
 import { validateRequest } from "../middleware/validation.middleware";
+import { protect } from "../middleware/auth.middleware";
 
 const router = Router();
 
@@ -18,6 +19,13 @@ router.post(
     loginValidation,
     validateRequest,
     loginUser
+);
+
+// Route to current user
+router.get(
+    "/me",
+    protect,
+    getCurrentUser
 );
 
 // Export the router

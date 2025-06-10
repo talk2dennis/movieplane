@@ -75,6 +75,37 @@ export const loginUser = async (req: Request, res: Response, next: NextFunction)
     }
 }
 
+// Controller for getting the current user with JWT token
+export const getCurrentUser = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        // Get user ID from JWT token
+        const userId = req.user?.id;
+        if (!userId) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        // Find user by ID
+        const user = await User.findById(userId, '-password_hash');
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        // Respond with user data
+        res.status(200).json({
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                createdAt: user.createdAt,
+                updatedAt: user.updatedAt,
+            },
+        });
+    }
+    catch (error) {
+        next(error);
+    }
+}
+
 // get all users
 export const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
     try {
