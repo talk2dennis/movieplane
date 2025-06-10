@@ -34,7 +34,7 @@ const AppRoutes: React.FC = () => {
                 <Route path="/register" element={<RegisterPage />} />
 
                 {/* Protected Routes */}
-                <Route path="/profile/:userId" element={
+                <Route path="/profile" element={
                     <PrivateRoute>
                         <UserProfilePage />
                     </PrivateRoute>

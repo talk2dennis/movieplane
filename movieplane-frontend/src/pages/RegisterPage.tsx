@@ -21,7 +21,7 @@ const RegisterPage = () => {
     return (
         <div className="register-page">
             <h1>Register</h1>
-            <form className="register-form" onSubmit={handleSubmit}>
+            <form className="register-form">
                 <div className="form-group">
                     <label htmlFor="username">Username:</label>
                     <input
@@ -30,6 +30,9 @@ const RegisterPage = () => {
                         name="username"
                         value={form.username}
                         onChange={handleChange}
+                        placeholder="johndoe"
+                        autoComplete="username"
+                        aria-label="Username"
                         required
                     />
                 </div>
@@ -41,6 +44,7 @@ const RegisterPage = () => {
                         name="email"
                         value={form.email}
                         onChange={handleChange}
+                        placeholder="johndoe@example.com"
                         required
                     />
                 </div>
@@ -52,6 +56,7 @@ const RegisterPage = () => {
                         name="password"
                         value={form.password}
                         onChange={handleChange}
+                        placeholder="••••••••"
                         required
                     />
                 </div>

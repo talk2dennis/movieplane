@@ -49,6 +49,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("token", newToken);
         setToken(newToken);
         setUser(userData);
+        // redirect to homepage after successful login
+        window.location.href = "/"
     };
 
     const logout = (redirect = true) => {

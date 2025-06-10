@@ -36,7 +36,7 @@ axiosClient.interceptors.response.use(
              // Prevent infinite retry loop
             originalRequest._retry = true;
             localStorage.removeItem('token');
-            window.location.href = '/login';
+            // window.location.href = '/login';
         }
         return Promise.reject(error);
     }

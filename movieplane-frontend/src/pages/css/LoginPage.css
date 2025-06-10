@@ -1,9 +1,8 @@
 /* LoginPage.css */
 
 .login-container {
-  min-height: 100vh;
+  min-height: 90vh;
   display: flex;
-  align-items: center;
   justify-content: center;
   background: #f7f8fa;
   padding: 16px;
@@ -11,7 +10,7 @@
 
 .login-box {
   background: #fff;
-  padding: 32px 24px;
+  padding: 12px 24px;
   border-radius: 12px;
   box-shadow: 0 4px 24px rgba(0,0,0,0.08);
   width: 100%;
@@ -22,7 +21,7 @@
 }
 
 .login-title {
-  margin: 0 0 12px 0;
+  margin: 12px 0;
   font-size: 2rem;
   font-weight: 700;
   color: #222;
@@ -80,9 +79,22 @@
   margin-top: 8px;
 }
 
+.login-button:disabled {
+  background: #9ca3af;
+  color: #000;
+  cursor: not-allowed;
+}
+
+.login-button:disabled:hover,
+.login-button:disabled:focus {
+  background: #9ca3af;
+  color: #000;
+  cursor: not-allowed;
+}
+
 .login-button:hover,
 .login-button:focus {
-  background: #1e40af;
+  background: #10235f;
 }
 
 /* Tablet styles */
