@@ -36,14 +36,24 @@ const HomePage: React.FC = () => {
 
     return (
         <div className="home-page">
-            <h1>Welcome to MoviePlane</h1>
+            <div className="hero">
+                <div className="hero-content">
+                    <h1>Welcome to MoviePlane</h1>
+                    <p>Your one-stop destination for all things movies!</p>
+                    <p>Explore the latest and greatest films from around the world.</p>
+                    <p>Discover, watch, and enjoy your favorite movies with us.</p>
+                    <p>Join our community of movie lovers today!</p>
+                </div>
+            </div>
             <div className="movie-grid">
                 {loading && <p>Loading movies...</p>}
                 {error && <p className="error">{error}</p>}
                 {!loading && !error && movies.length === 0 && <p>No movies found.</p>}
                 {!loading && !error && movies.map((movie) => (
                     <div key={movie.id} className="movie-card">
-                        <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                        <div className="movie-poster">
+                            <img src={`https://image.tmdb.org/t/p/w500${movie.poster_path}`} alt={movie.title} />
+                        </div>
                         <h2>{movie.title}</h2>
                         <p className='mDescription'>{movie.overview}</p>
                         <p><strong>Release Date:</strong> {new Date(movie.release_date).toLocaleDateString()}</p>

@@ -4,12 +4,12 @@
     flex-direction: column;
     align-items: center;
     background: #f8fafc;
-    padding: 16px;
+    padding: 10px;
     color: black;
 }
 
 .register-page h1 {
-    margin-bottom: 24px;
+    margin-bottom: 15px;
     font-size: 2rem;
     color: #22223b;
     text-align: center;
@@ -69,6 +69,25 @@
 
 .register-btn:hover {
     background: #3d47d6;
+}
+
+.register-btn:disabled {
+    background: #b0b0b0;
+    cursor: not-allowed;
+}
+
+/* Mobile styles */
+@media (min-width: 599px) {
+    .register-page {
+        padding: 24px 0;
+    }
+    .register-form {
+        padding: 24px 16px;
+        max-width: 90%;
+    }
+    .register-page h1 {
+        font-size: 1.8rem;
+    }
 }
 
 /* Tablet styles */
