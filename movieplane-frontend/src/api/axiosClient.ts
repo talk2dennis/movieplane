@@ -43,3 +43,14 @@ axiosClient.interceptors.response.use(
 );
 
 export default axiosClient;
+
+// for movie axiosClient
+
+const tmdbClient = axios.create({
+  baseURL: "https://api.themoviedb.org/3",
+  params: {
+    api_key: import.meta.env.VITE_TMDB_API_KEY,
+  },
+});
+
+export { tmdbClient };

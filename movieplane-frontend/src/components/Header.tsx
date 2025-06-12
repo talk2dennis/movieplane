@@ -15,7 +15,7 @@ export default function Header() {
 
   return (
     <header className="app-header">
-      <div className="logo">🎬 MovieTime</div>
+      <div className="logo">🎬 MoviePlane</div>
 
       <div className="search-bar">
         <input type="text" placeholder="Search movies..." />
@@ -23,6 +23,9 @@ export default function Header() {
 
       <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
         <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Home</NavLink>
+        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Movies</NavLink>
+        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Series</NavLink>
+        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Kids</NavLink>
 
         {!isAuthenticated && (
           <>
@@ -33,7 +36,7 @@ export default function Header() {
 
         {isAuthenticated && (
           <>
-            <NavLink to={`/profile/${user?.id}`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">Welcome, {user?.username}</span></NavLink>
+            <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">Welcome, {user?.username}</span></NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>
           </>
         )}

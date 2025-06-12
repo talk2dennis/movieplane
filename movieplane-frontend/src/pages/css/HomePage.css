@@ -1,0 +1,65 @@
+body {
+    background-color: rgb(3, 21, 43);
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+h1 {
+    color: white;
+    text-align: center;
+    margin-top: 1rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.home-container {
+    padding: 2rem;
+    margin: auto;
+    max-width: 100%;
+}
+
+.movie-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.movie-card {
+    text-align: center;
+    overflow: hidden;
+    border-radius: 8px;
+    color: white;
+    width: 400px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease;
+}
+
+.movie-card .mDescription {
+    font-size: 0.9rem;
+    text-align: justify;
+    padding: 0.5rem;
+}
+
+
+.movie-card img {
+    width: 100%;
+    height: 300px;
+    object-fit:cover;
+    border-radius: 4px;
+}
+
+.movie-card img:hover {
+    transform: scale(1.1);
+    transition: ease-in-out 0.3s;
+}
+
+.footer {
+    padding-top: 10px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    height: 80px;
+}

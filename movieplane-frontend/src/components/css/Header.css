@@ -1,6 +1,6 @@
 .app-header {
-  height: 80px;
-  background: linear-gradient(135deg, #2a2a72, #009ffd);
+  height: 70px;
+  background: linear-gradient(135deg, rgb(3, 21, 43), #2a2a72);
   display: flex;
   align-items: center;
   justify-content: space-between;
