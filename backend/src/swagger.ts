@@ -1,5 +1,4 @@
 import { Express } from "express";
-import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
 import swaggerJSDoc from 'swagger-jsdoc';
@@ -32,8 +31,22 @@ const options = {
         url: `http://localhost:${PORT}`,
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // optional but recommended
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
   },
-  apis: ["./src/modules/**/*.routes.ts"],
+  apis: ["./src/routes/**/*.ts"]
 };
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -43,7 +56,6 @@ export const setupSwaggerDocs = (app: Express) => {
   app.use(
     "/api-docs", swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }),
-    swaggerUi.serve
 );
   console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 };

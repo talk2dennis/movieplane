@@ -8,7 +8,7 @@ export interface IUser extends Document {
     profilePicture?: string;
     createdAt: Date;
     updatedAt: Date;
-    favorites_movies: number[];
+    favorite_movies: number[];
     watchlist_movies: number[];
     followers?: string[];
     following?: string[];
