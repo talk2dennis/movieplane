@@ -29,3 +29,5 @@ export const MONGO_URI = process.env.MONGO_URI || '';
 export const JWT_SECRET = process.env.JWT_SECRET || '';
 export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
 export const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
+export const MOVIE_API_KEY = process.env.MOVIE_API_KEY
+export const MOVIE_API_URL = process.env.MOVIE_API_URL;

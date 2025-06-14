@@ -5,8 +5,13 @@ export interface IUser extends Document {
     username: string;
     email: string;
     password_hash: string;
+    profilePicture?: string;
     createdAt: Date;
     updatedAt: Date;
+    favorite_movies: number[];
+    watchlist_movies: number[];
+    followers?: string[];
+    following?: string[];
     // Method to compare passwords
     comparePassword(candidatePassword: string): Promise<boolean>;
 }
@@ -32,6 +37,34 @@ const userSchema: Schema = new Schema({
         required: [true, 'Password is required'],
         minlength: [6, 'Password must be at least 6 characters long'],
         select: false
+    },
+    profilePicture: {
+        type: String,
+        default: 'https://example.com/default-profile-picture.png'
+    },
+    followers: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            default: []
+        }
+    ],
+    following: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            default: []
+        }
+    ],
+    favorites_movies: {
+        type: [Number],
+        ref: 'Movie',
+        default: []
+    },
+    watchlist_movies: {
+        type: [Number],
+        ref: 'Movie',
+        default: []
     }
 }, {
     timestamps: true

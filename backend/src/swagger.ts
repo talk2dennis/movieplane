@@ -1,11 +1,15 @@
 import { Express } from "express";
-import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import dotenv from 'dotenv';
 import swaggerJSDoc from 'swagger-jsdoc';
+
+
 dotenv.config();
 const PORT = process.env.PORT || 3000;
-
+const NODE_ENV = process.env.NODE_ENV || 'development';
+const url = NODE_ENV === 'production'
+  ? 'https://movieplane.onrender.com'
+  : `http://localhost:${PORT}`;
 
 
 // swagger options
@@ -29,11 +33,25 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
+        url,
+      },
+    ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
       },
     ],
   },
-  apis: ["./src/modules/**/*.routes.ts"],
+  apis: ["./src/routes/**/*.ts"]
 };
 
 const swaggerSpec = swaggerJSDoc(options);
@@ -43,7 +61,6 @@ export const setupSwaggerDocs = (app: Express) => {
   app.use(
     "/api-docs", swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }),
-    swaggerUi.serve
-);
-  console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
+  );
+  console.log(`Swagger docs available at ${url}/api-docs`);
 };
