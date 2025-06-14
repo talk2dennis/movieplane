@@ -28,7 +28,9 @@ const options = {
     },
     servers: [
       {
-        url: `http://localhost:${PORT}`,
+        url: process.env.NODE_ENV === 'production'
+          ? 'https://your-app-name.onrender.com'
+          : `http://localhost:${PORT}`,
       },
     ],
     components: {
@@ -36,7 +38,7 @@ const options = {
         bearerAuth: {
           type: "http",
           scheme: "bearer",
-          bearerFormat: "JWT", // optional but recommended
+          bearerFormat: "JWT",
         },
       },
     },
@@ -56,6 +58,6 @@ export const setupSwaggerDocs = (app: Express) => {
   app.use(
     "/api-docs", swaggerUi.serve,
     swaggerUi.setup(swaggerSpec, { explorer: true }),
-);
+  );
   console.log(`Swagger docs available at http://localhost:${PORT}/api-docs`);
 };
