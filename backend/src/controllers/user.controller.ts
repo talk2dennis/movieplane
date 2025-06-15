@@ -50,7 +50,7 @@ const fetchAndCacheMovie = async (tmdbId: number): Promise<IMovie | null> => {
 export const toggleFavoriteMovie = async (req: Request, res: Response, next: NextFunction) => {
     // check if the user is authenticated and the movie ID is provided
     try {
-        const { movieId } = req.params;
+        const { movieId } = req.body;
         const currentUserId = req.user!.id;
         if (!currentUserId) {
             return res.status(401).json({ message: "Unauthorized" });
@@ -70,14 +70,20 @@ export const toggleFavoriteMovie = async (req: Request, res: Response, next: Nex
 
         // Fetch and cache the movie details if not already present
         await fetchAndCacheMovie(movieTmdbId);
-        const index = user.favorite_movies.indexOf(movieTmdbId);
+        // Check if the movie is already in favorites
+        if (user.favorites_movies.length >= 100) {
+            return res.status(400).json({ message: 'You can only have up to 100 favorite movies.' });
+        }
+      
+        const index = user.favorites_movies.includes(movieTmdbId) ? user.favorites_movies.indexOf(movieTmdbId) : -1;
+        console.log(`Movie TMDB ID: ${movieTmdbId}, Index in favorites: ${index}`);
         if (index === -1) {
              // Add to favorites
-            user.favorite_movies.push(movieTmdbId);
+            user.favorites_movies.push(movieTmdbId);
             await user.save();
             res.status(200).json({ message: 'Movie added to favorites', action: 'added' });
         } else {
-            user.favorite_movies.splice(index, 1);
+            user.favorites_movies.splice(index, 1);
              // Remove from favorites
             await user.save();
             res.status(200).json({ message: 'Movie removed from favorites', action: 'removed' });
@@ -91,7 +97,7 @@ export const toggleFavoriteMovie = async (req: Request, res: Response, next: Nex
 export const toggleWatchlistMovie = async (req: Request, res: Response, next: NextFunction) => {
     // check if the user is authenticated and the movie ID is provided
     try {
-        const { movieId } = req.params;
+        const { movieId } = req.body;
         const currentUserId = req.user!.id;
         if (!currentUserId) {
             return res.status(401).json({ message: "Unauthorized" });
@@ -147,7 +153,7 @@ export const getFavoriteMovies = async (req: Request, res: Response, next: NextF
             return res.status(403).json({ message: 'You must follow this user to view their favorite movies.' });
         }
 
-        const favoriteMovies = await Movie.find({ tmdb_id: { $in: targetUser.favorite_movies } });
+        const favoriteMovies = await Movie.find({ tmdb_id: { $in: targetUser.favorites_movies } });
 
         res.status(200).json(favoriteMovies);
     } catch (error) {
