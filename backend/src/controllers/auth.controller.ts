@@ -85,20 +85,16 @@ export const getCurrentUser = async (req: Request, res: Response, next: NextFunc
         }
 
         // Find user by ID
-        const user = await User.findById(userId, '-password_hash');
+        const user = await User.findById(userId, '-password_hash').populate('favorites_movies').populate('watchlist_movies').populate('followers', '-password_hash').populate('following', '-password_hash');
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
 
+        console.log(user.favorites_movies);
+
         // Respond with user data
         res.status(200).json({
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-                createdAt: user.createdAt,
-                updatedAt: user.updatedAt,
-            },
+            user
         });
     }
     catch (error) {

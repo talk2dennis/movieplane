@@ -68,18 +68,22 @@ export const toggleFavoriteMovie = async (req: Request, res: Response, next: Nex
             return res.status(404).json({ message: 'User not found.' });
         }
 
+        console.log("User: ", user);
+
         // Fetch and cache the movie details if not already present
-        await fetchAndCacheMovie(movieTmdbId);
+        const movie = await fetchAndCacheMovie(movieTmdbId);
+        // check if movie was found
+        if (!movie) return res.status(404).json({ message: "Movie cannot be found."})
         // Check if the movie is already in favorites
-        if (user.favorites_movies.length >= 100) {
-            return res.status(400).json({ message: 'You can only have up to 100 favorite movies.' });
-        }
+        // if (user.favorites_movies.length >= 100) {
+        //     return res.status(400).json({ message: 'You can only have up to 100 favorite movies.' });
+        // }
       
-        const index = user.favorites_movies.includes(movieTmdbId) ? user.favorites_movies.indexOf(movieTmdbId) : -1;
+        const index = user.favorites_movies.includes(movie._id) ? user.favorites_movies.indexOf(movie._id) : -1;
         console.log(`Movie TMDB ID: ${movieTmdbId}, Index in favorites: ${index}`);
         if (index === -1) {
              // Add to favorites
-            user.favorites_movies.push(movieTmdbId);
+            user.favorites_movies.push(movie._id);
             await user.save();
             res.status(200).json({ message: 'Movie added to favorites', action: 'added' });
         } else {
@@ -115,11 +119,13 @@ export const toggleWatchlistMovie = async (req: Request, res: Response, next: Ne
             return res.status(404).json({ message: 'User not found.' });
         }
         // Fetch and cache the movie details if not already present
-        await fetchAndCacheMovie(movieTmdbId);
-        const index = user.watchlist_movies.indexOf(movieTmdbId);
+        const movie = await fetchAndCacheMovie(movieTmdbId);
+        // check if movie was found
+        if (!movie) return res.status(404).json({ message: "Movie cannot be found."});
+        const index = user.watchlist_movies.indexOf(movie._id);
         if (index === -1) {
             // Add to watchlist
-            user.watchlist_movies.push(movieTmdbId);
+            user.watchlist_movies.push(movie._id);
             await user.save();
             res.status(200).json({ message: 'Movie added to watchlist', action: 'added' });
         } else {
@@ -153,7 +159,7 @@ export const getFavoriteMovies = async (req: Request, res: Response, next: NextF
             return res.status(403).json({ message: 'You must follow this user to view their favorite movies.' });
         }
 
-        const favoriteMovies = await Movie.find({ tmdb_id: { $in: targetUser.favorites_movies } });
+        const favoriteMovies = await Movie.find({ _id: { $in: targetUser.favorites_movies } });
 
         res.status(200).json(favoriteMovies);
     } catch (error) {
@@ -176,7 +182,7 @@ export const getWatchlistMovies = async (req: Request, res: Response, next: Next
         ) {
             return res.status(403).json({ message: 'You must follow this user to view their watchlist movies.' });
         }
-        const watchlistMovies = await Movie.find({ tmdb_id: { $in: targetUser.watchlist_movies } });
+        const watchlistMovies = await Movie.find({ _id: { $in: targetUser.watchlist_movies } });
         res.status(200).json(watchlistMovies);
     } catch (error) {
         next(error);

@@ -8,8 +8,8 @@ export interface IUser extends Document {
     profilePicture?: string;
     createdAt: Date;
     updatedAt: Date;
-    favorites_movies: number[];
-    watchlist_movies: number[];
+    favorites_movies: string[];
+    watchlist_movies: string[];
     followers?: string[];
     following?: string[];
     // Method to compare passwords
@@ -56,16 +56,16 @@ const userSchema: Schema = new Schema({
             default: []
         }
     ],
-    favorites_movies: {
-        type: [Number],
+    favorites_movies: [{
+        type: Schema.Types.ObjectId,
         ref: 'Movie',
         default: []
-    },
-    watchlist_movies: {
-        type: [Number],
+    }],
+    watchlist_movies: [{
+        type: Schema.Types.ObjectId,
         ref: 'Movie',
         default: []
-    }
+    }]
 }, {
     timestamps: true
 });

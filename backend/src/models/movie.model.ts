@@ -1,7 +1,8 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, ObjectId, Schema } from 'mongoose';
 
 // Define the TypeScript interface for a Movie Document
 export interface IMovie extends Document {
+    _id: string;
     id: number;
     title: string;
     overview: string;
