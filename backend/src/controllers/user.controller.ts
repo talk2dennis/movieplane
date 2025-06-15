@@ -3,6 +3,7 @@ import Movie, { IMovie } from "../models/movie.model";
 import User, { IUser } from "../models/user.model";
 import { MOVIE_API_KEY } from "../config/env.check"
 import axios from "axios";
+import mongoose from "mongoose";
 
 
 // for trending and popular movies
@@ -130,10 +131,24 @@ export const toggleWatchlistMovie = async (req: Request, res: Response, next: Ne
 // get favorites movies
 export const getFavoriteMovies = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = req.user!.id;
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        const favoriteMovies = await Movie.find({ tmdb_id: { $in: user.favorite_movies } });
+         // Get ID from param or current user
+        const targetUserId = req.params.userId || req.user!.id;
+        const currentUserId = req.user!.id;
+
+        // If the target user ID is not provided, use the current user's ID
+        const targetUser = await User.findById(targetUserId);
+        if (!targetUser) return res.status(404).json({ message: 'User not found' });
+
+        // If trying to access someone else's list, check if current user is following them
+        if (
+            targetUserId.toString() !== currentUserId.toString() &&
+            !(targetUser.followers?.includes(currentUserId))
+        ) {
+            return res.status(403).json({ message: 'You must follow this user to view their favorite movies.' });
+        }
+
+        const favoriteMovies = await Movie.find({ tmdb_id: { $in: targetUser.favorite_movies } });
+
         res.status(200).json(favoriteMovies);
     } catch (error) {
         next(error);
@@ -143,10 +158,19 @@ export const getFavoriteMovies = async (req: Request, res: Response, next: NextF
 // get watchlist movies
 export const getWatchlistMovies = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userId = req.user!.id;
-        const user = await User.findById(userId);
-        if (!user) return res.status(404).json({ message: 'User not found' });
-        const watchlistMovies = await Movie.find({ tmdb_id: { $in: user.watchlist_movies } });
+        const targetUserId = req.params.userId || req.user!.id;
+        const currentUserId = req.user!.id;
+        // If the target user ID is not provided, use the current user's ID
+        const targetUser = await User.findById(targetUserId);
+        if (!targetUser) return res.status(404).json({ message: 'User not found' });
+        // If trying to access someone else's list, check if current user is following them
+        if (
+            targetUserId.toString() !== currentUserId.toString() &&
+            !(targetUser.followers?.includes(currentUserId))
+        ) {
+            return res.status(403).json({ message: 'You must follow this user to view their watchlist movies.' });
+        }
+        const watchlistMovies = await Movie.find({ tmdb_id: { $in: targetUser.watchlist_movies } });
         res.status(200).json(watchlistMovies);
     } catch (error) {
         next(error);
