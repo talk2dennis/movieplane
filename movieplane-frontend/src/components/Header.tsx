@@ -1,5 +1,5 @@
 // src/components/Header.tsx
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './css/Header.css';

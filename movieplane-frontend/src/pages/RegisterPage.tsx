@@ -43,6 +43,9 @@ const RegisterPage = () => {
 
         try {
             const response = await axiosClient.post("/auth/register", form);
+            if (response.status !== 201) {
+                throw new Error("Registration failed");
+            }
             alert("Registration successful! You can now log in.");
             navigate("/login");
         } catch (error: any) {
