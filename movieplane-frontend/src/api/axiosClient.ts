@@ -1,48 +1,48 @@
-// src/api/axiosClient.ts
 import axios from 'axios';
 
+const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
+console.log('Axios Base URL:', baseURL);
+
 const axiosClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api',
+    baseURL,
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Request interceptor to attach JWT token
+
 axiosClient.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('token');
-        console.log(import.meta.env.BASE_URL)
-        if (token) {
-            if (!config.headers) {
-                config.headers = {};
+        console.log("Outgoing request:", config.method, config.url);
+        if (typeof window !== 'undefined') {
+            const token = localStorage.getItem('token');
+            if (token) {
+                config.headers = config.headers || {};
+                config.headers.Authorization = `Bearer ${token}`;
             }
-            config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
     },
-    (error) => {
-        return Promise.reject(error);
-    }
+    (error) => Promise.reject(error)
 );
 
-// Response interceptor for error handling
 axiosClient.interceptors.response.use(
     (response) => response,
-    async (error) => {
+    (error) => {
         const originalRequest = error.config;
-        
-        if (error.response.status === 401 && !originalRequest._retry) {
-             // Prevent infinite retry loop
+        if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
-            localStorage.removeItem('token');
-            // window.location.href = '/login';
+            if (typeof window !== 'undefined') {
+                localStorage.removeItem('token');
+                // Optionally dispatch logout event here
+            }
         }
         return Promise.reject(error);
     }
 );
 
 export default axiosClient;
+
 
 // for movie axiosClient
 

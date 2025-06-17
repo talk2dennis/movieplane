@@ -88,7 +88,7 @@ const fetchAndCacheMovieList = async (endpoint: string, cacheType: 'popular' | '
     } catch (error: any) {
         console.error(`Error fetching ${cacheType} movies from TMDb:`, error.message);
         // If fetching fails, return empty array or throw error
-        return [];
+        return error.response?.status === 404 ? [] : Promise.reject(new Error(`Failed to fetch ${cacheType} movies: ${error.message}`));
     }
 };
 

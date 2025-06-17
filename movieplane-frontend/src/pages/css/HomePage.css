@@ -94,3 +94,17 @@ h1 {
     color: white;
     height: 80px;
 }
+.footer p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+.footer a {
+    color: #00bcd4;
+    text-decoration: none;
+}
+.footer a:hover {
+    text-decoration: underline;
+}
+.footer a:visited {
+    color: #00bcd4;
+}

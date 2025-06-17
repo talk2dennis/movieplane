@@ -222,17 +222,46 @@ export default userRouter;
  *         description: List of favorite movies
  */
 
+// get favorite movies of a user using the userId
+/**
+ * @swagger
+ * /api/users/favorites:
+ *   get:
+ *     summary: get favorite movies of a user using the userId
+ *     reqestParameters:
+ *       - in: query
+ *         name: userId
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: ID of the user
+ *     responses:
+ *       200:
+ *         description: List of favorite movies
+ *       404:
+ *         description: User not found
+ *     tags: [Users]
+ *     security:
+ *       - bearerAuth: []
+ */
+
 /**
  * @swagger
  * /api/users/watchlist:
  *   get:
  *     summary: Get watchlist movies of the authenticated user
- *     tags: [Users]
- *     security:
- *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: ID of the user
  *     responses:
  *       200:
  *         description: List of watchlist movies
+ *     tags: [Users]
+ *     security:
  */
 
 /**

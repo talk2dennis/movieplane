@@ -3,18 +3,18 @@ import axiosClient from "../api/axiosClient";
 import { useAuth } from "../contexts/AuthContext";
 import type { IUser } from "../types";
 import "./css/LoginPage.css";
+import Loading from "../components/Loading";
 
 
 // login logic
-const loginUser = (email: string, password: string, login: (token: string, user: IUser) => void) => {
-    return axiosClient.post<{ token: string; user: IUser }>("/auth/login", { email, password })
-        .then((response) => {
-            const { token, user } = response.data;
-            login(token, user)
-        })
-        .catch(error => {
-            throw new Error(error.response?.data?.message || "Login failed. Please try again.");
-        });
+const loginUser = async (email: string, password: string, login: (token: string, user: IUser) => void) => {
+    try {
+        const response = await axiosClient.post<{ token: string; user: IUser; }>("/auth/login", { email, password });
+        const { token: token_1, user: user_1 } = response.data;
+        login(token_1, user_1);
+    } catch (error: any) {
+        throw new Error(error.response?.data?.message || "Login failed. Please try again.");
+    }
 }
 
 // validate email and password
@@ -83,6 +83,11 @@ const LoginPage = () => {
             setLoading(false);
         }
     };
+
+    // if loading, show a loading spinner or message
+    if (loading) {
+        <Loading />
+    }
 
 
     return (
