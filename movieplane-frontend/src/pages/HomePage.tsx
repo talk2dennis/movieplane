@@ -4,7 +4,7 @@ import './css/HomePage.css'
 import type { IMovie } from '../types';
 import axiosClient from '../api/axiosClient';
 import Loading from '../components/Loading';
-import renderMovieSection from '../components/RenderMovie';
+import MovieSection from '../components/RenderMovie';
 
 
 const HomePage: React.FC = () => {
@@ -18,6 +18,21 @@ const HomePage: React.FC = () => {
         const fetchMovies = async () => {
             setLoading(true);
             setError(null);
+            const storedMovies = localStorage.getItem('movies');
+            if (storedMovies) {
+                const parsedMovies = JSON.parse(storedMovies) as IMovie[];
+                setMovies(parsedMovies);
+                setLoading(false);
+                return;
+            }
+            const storedTrendingMovies = localStorage.getItem('trendingMovies');
+            console.log(`Stored trending movies: ${storedTrendingMovies}`);
+            if (storedTrendingMovies) {
+                const parsedTrendingMovies = JSON.parse(storedTrendingMovies) as IMovie[];
+                setTrendingMovies(parsedTrendingMovies);
+                setLoading(false);
+                return;
+            }
             try {
                 const [popularRes, trendingRes] = await Promise.all([
                     axiosClient.get<IMovie[]>('movies/popular'),
@@ -25,7 +40,9 @@ const HomePage: React.FC = () => {
                 ]);
 
                 setMovies(popularRes.data || []);
+                localStorage.setItem('movies', JSON.stringify(popularRes.data || []));
                 setTrendingMovies(trendingRes.data || []);
+                localStorage.setItem('trendingMovies', JSON.stringify(trendingRes.data || []));
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : String(err);
                 setError(`Failed to load movies. Please try again later: ${errorMessage}`);
@@ -58,8 +75,9 @@ const HomePage: React.FC = () => {
             {loading && <Loading />}
             {error && <p className="error">{error}</p>}
 
-            {!loading && !error && renderMovieSection('Popular Movies', movies)}
-            {!loading && !error && renderMovieSection('Trending Movies', trendingMovies)}
+
+            {!loading && !error && <MovieSection title="Popular Movies" movies={movies} />}
+            {!loading && !error && <MovieSection title="Trending Movies" movies={trendingMovies} />}
 
             <footer className="footer">
                 <div className="footer-content">
