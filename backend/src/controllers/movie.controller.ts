@@ -54,14 +54,7 @@ const fetchAndCacheMovieList = async (endpoint: string, cacheType: 'popular' | '
     }
 
     try {
-        const response = await axios.get(`${MOVIE_API_URL}/${endpoint}`, {
-            params: {
-                api_key: MOVIE_API_KEY,
-                sort_by: 'popularity.desc',
-                language: 'en-US',
-                page: 1
-            }
-        });
+        const response = await axios.get(`${MOVIE_API_URL}/${endpoint}?api_key=${MOVIE_API_KEY}`);
 
         // Extract movies from the response
         const data = response.data as { results: IMovie[] };
