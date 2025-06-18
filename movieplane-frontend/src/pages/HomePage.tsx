@@ -19,20 +19,15 @@ const HomePage: React.FC = () => {
             setLoading(true);
             setError(null);
             const storedMovies = localStorage.getItem('movies');
-            if (storedMovies) {
-                const parsedMovies = JSON.parse(storedMovies) as IMovie[];
-                setMovies(parsedMovies);
-                setLoading(false);
-                return;
-            }
             const storedTrendingMovies = localStorage.getItem('trendingMovies');
-            console.log(`Stored trending movies: ${storedTrendingMovies}`);
-            if (storedTrendingMovies) {
-                const parsedTrendingMovies = JSON.parse(storedTrendingMovies) as IMovie[];
-                setTrendingMovies(parsedTrendingMovies);
+            // Check if movies are already stored in localStorage
+            if (storedMovies && storedTrendingMovies) {
+                setMovies(JSON.parse(storedMovies));
+                setTrendingMovies(JSON.parse(storedTrendingMovies));
                 setLoading(false);
                 return;
             }
+
             try {
                 const [popularRes, trendingRes] = await Promise.all([
                     axiosClient.get<IMovie[]>('movies/popular'),
@@ -41,7 +36,7 @@ const HomePage: React.FC = () => {
 
                 setMovies(popularRes.data || []);
                 localStorage.setItem('movies', JSON.stringify(popularRes.data || []));
-                setTrendingMovies(trendingRes.data || []);
+                setTrendingMovies(popularRes.data || []);
                 localStorage.setItem('trendingMovies', JSON.stringify(trendingRes.data || []));
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : String(err);
@@ -75,10 +70,16 @@ const HomePage: React.FC = () => {
             {loading && <Loading />}
             {error && <p className="error">{error}</p>}
 
-
             {!loading && !error && <MovieSection title="Popular Movies" movies={movies} />}
             {!loading && !error && <MovieSection title="Trending Movies" movies={trendingMovies} />}
-
+            {error && (
+                <div className="error-container">
+                    <p className="error-message">{error}</p>
+                    <button className="retry-button" onClick={() => window.location.reload()}>
+                        Retry
+                    </button>
+                </div>
+            )}
             <footer className="footer">
                 <div className="footer-content">
                     <p>&copy; {new Date().getFullYear()} MoviePlane. All rights reserved.</p>

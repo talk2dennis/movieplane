@@ -32,6 +32,9 @@ const AppRoutes: React.FC = () => {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
+                <Route path='/movies/:movieId' element={<MovieDetailPage />} />
+                <Route path="/about" element={<div>About Page</div>} />
+                <Route path="/contact" element={<div>Contact Page</div>} />
 
                 {/* Protected Routes */}
                 <Route path="/profile" element={

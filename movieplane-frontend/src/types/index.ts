@@ -12,7 +12,8 @@ export interface IUser {
 
 // interface IMovie 
 export interface IMovie {
-    id: string;
+    _id: string;
+    tmdb_id: number;
     title: string;
     overview: string;
     backdrop_path: string;

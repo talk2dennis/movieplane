@@ -58,7 +58,7 @@
   left: 0;
   height: 3px;
   width: 0;
-  background-color: #fff;
+  background-color: tomato;
   transition: width 0.3s ease-in-out;
 }
 
@@ -68,7 +68,7 @@
 }
 
 .nav-link:hover {
-  color: #d1eaff;
+  color: tomato;
 }
 
 .user-greeting {
