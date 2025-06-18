@@ -1,5 +1,6 @@
 .movie-detail-container {
   display: flex;
+  gap: 2rem;
   flex-direction: column;
 }
 
@@ -97,4 +98,33 @@
   margin-top: 3rem;
   padding: 2rem;
   background-color: #0f1b2b;
+}
+
+@media screen and (max-width: 768px) {
+  .movie-detail-content {
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+  }
+
+  .poster {
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .details {
+    text-align: center;
+  }
+
+  .actions {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .fav-btn,
+  .watch-btn {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+    
 }

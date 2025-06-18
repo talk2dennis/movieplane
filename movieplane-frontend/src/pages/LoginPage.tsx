@@ -86,7 +86,7 @@ const LoginPage = () => {
 
     // if loading, show a loading spinner or message
     if (loading) {
-        <Loading />
+        return <Loading />;
     }
 
 

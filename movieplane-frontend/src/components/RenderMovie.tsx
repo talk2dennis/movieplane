@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import type { IMovie } from "../types";
+import "./css/RenderMovies.css";
 
 interface Props {
   title: string;
   movies: IMovie[];
   detail?: boolean;
+  isAuthenticated?: boolean;
 }
 
-const MovieSection: React.FC<Props> = ({ title, movies, detail = false }) => {
+const MovieSection: React.FC<Props> = ({ title, movies, detail=false, isAuthenticated }) => {
   const paginationLimit = 4;
   const navigate = useNavigate();
   const [visibleCount, setVisibleCount] = useState(paginationLimit);
@@ -16,6 +18,16 @@ const MovieSection: React.FC<Props> = ({ title, movies, detail = false }) => {
   const handleShowMore = () => {
     setVisibleCount((prev) => prev + paginationLimit);
   };
+
+  const handleShowDetails = (movieId: number) => {
+    if (isAuthenticated) {
+      navigate(`/movies/${movieId}`);
+    } else {
+      alert("Please log in to view movie details.");
+      // Redirect to login if not authenticated
+      navigate("/login");
+    }
+  }
 
   return (
     <div className="section">
@@ -39,7 +51,7 @@ const MovieSection: React.FC<Props> = ({ title, movies, detail = false }) => {
                 <p><strong>Rating:</strong> {movie.vote_average}</p>
               </>
             )}
-            <button onClick={() => navigate(`/movies/${movie.tmdb_id}`)}>
+            <button onClick={() => handleShowDetails(movie.tmdb_id)}>
               View Details
             </button>
           </div>

@@ -5,6 +5,7 @@ import type { IMovie } from '../types';
 import axiosClient from '../api/axiosClient';
 import Loading from '../components/Loading';
 import MovieSection from '../components/RenderMovie';
+import { useAuth } from '../contexts/AuthContext';
 
 
 const HomePage: React.FC = () => {
@@ -13,6 +14,7 @@ const HomePage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -70,8 +72,8 @@ const HomePage: React.FC = () => {
             {loading && <Loading />}
             {error && <p className="error">{error}</p>}
 
-            {!loading && !error && <MovieSection title="Popular Movies" movies={movies} />}
-            {!loading && !error && <MovieSection title="Trending Movies" movies={trendingMovies} />}
+            {!loading && !error && <MovieSection title="Popular Movies" movies={movies} isAuthenticated={isAuthenticated} />}
+            {!loading && !error && <MovieSection title="Trending Movies" movies={trendingMovies} isAuthenticated={isAuthenticated} />}
             {error && (
                 <div className="error-container">
                     <p className="error-message">{error}</p>

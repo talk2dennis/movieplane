@@ -7,7 +7,7 @@ import './css/Header.css';
 export default function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-//   const navigate = useNavigate();
+  //   const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
@@ -23,9 +23,6 @@ export default function Header() {
 
       <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
         <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Home</NavLink>
-        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Movies</NavLink>
-        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Series</NavLink>
-        <NavLink to="/" className="nav-link" onClick={() => setMenuOpen(false)}>Kids</NavLink>
 
         {!isAuthenticated && (
           <>
@@ -36,7 +33,9 @@ export default function Header() {
 
         {isAuthenticated && (
           <>
-            <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">Welcome, {user?.username}</span></NavLink>
+            <NavLink to="/favorites" className="nav-link" onClick={() => setMenuOpen(false)}>Favorites</NavLink>
+            <NavLink to="/watchlist" className="nav-link" onClick={() => setMenuOpen(false)}>Watchlist</NavLink>
+            <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">{user?.username}</span></NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>
           </>
         )}
