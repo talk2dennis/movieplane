@@ -16,7 +16,7 @@ const MovieDetailPage: React.FC = () => {
     const [recommendedMovies, setRecommendedMovies] = useState<IMovie[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-	 const isAuthenticated = useAuth();
+	 const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const fetchMovie = async () => {
