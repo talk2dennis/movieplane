@@ -68,7 +68,7 @@ const MovieDetailPage: React.FC = () => {
 
             {recommendedMovies.length > 0 && (
                 <div className="recommended-section">
-                    <MovieSection title="Recommended Movies" movies={recommendedMovies} detail={true} />
+                    <MovieSection title="Recommended Movies" movies={recommendedMovies} />
                 </div>
             )}
         </div>
