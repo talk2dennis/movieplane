@@ -1,126 +1,213 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./css/RegisterPage.css";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faEye,
+  faEyeSlash,
+  faCheckCircle,
+  faTimesCircle,
+} from "@fortawesome/free-solid-svg-icons";
 
-const RegisterPage = () => {
-    const [form, setForm] = useState({
-        username: "",
-        email: "",
-        password: "",
-    });
-    const [error, setError] = useState<string | null>(null);
-    const [loading, setLoading] = useState<boolean>(false);
-    const navigate = useNavigate();
+const RegisterPage: React.FC = () => {
+  const [form, setForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+  });
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirm, setShowConfirm] = useState(false);
+  const navigate = useNavigate();
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setError(null);
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setError(null);
+    const { name, value } = e.target;
+    if (name === "confirm_password") {
+      setConfirmPassword(value);
+    } else {
+      setForm((prev) => ({ ...prev, [name]: value }));
+    }
+  };
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setLoading(true);
-        setError(null);
+  const getPasswordStrength = (password: string) => {
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/\d/.test(password)) strength++;
+    if (/[\W_]/.test(password)) strength++;
 
-        if (!form.username || !form.email || !form.password) {
-            setError("All fields are required.");
-            setLoading(false);
-            return;
-        }
+    if (strength <= 2) return "weak";
+    if (strength === 3 || strength === 4) return "medium";
+    return "strong";
+  };
 
-        if (form.password.length < 6) {
-            setError("Password must be at least 6 characters long.");
-            setLoading(false);
-            return;
-        }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
 
-        if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(form.email)) {
-            setError("Please enter a valid email address.");
-            setLoading(false);
-            return;
-        }
+    const { username, email, password } = form;
 
-        try {
-            const response = await axiosClient.post("/auth/register", form);
-            if (response.status !== 201) {
-                throw new Error("Registration failed");
-            }
-            alert("Registration successful! You can now log in.");
-            navigate("/login");
-        } catch (error: any) {
-            console.error("Registration failed:", error.response);
-            const fallback = "Registration failed. Please try again.";
-            const messages = error.response?.data?.errors;
+    if (!username || !email || !password || !confirmPassword) {
+      setError("All fields are required.");
+      setLoading(false);
+      return;
+    }
 
-            if (Array.isArray(messages)) {
-                setError(messages.map((err: { message: string }) => err.message).join("\n"));
-            } else {
-                setError(error.response?.data?.message || fallback);
-            }
-        } finally {
-            setLoading(false);
-        }
-    };
+    if (password !== confirmPassword) {
+      setError("Passwords do not match.");
+      setLoading(false);
+      return;
+    }
 
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
 
-    useEffect(() => {
-        console.log(loading);
-    }, [loading]);
+    if (!passwordRegex.test(password)) {
+      setError(
+        "Password must contain uppercase, lowercase, number, special character and be 8+ chars."
+      );
+      setLoading(false);
+      return;
+    }
 
-    return (
-        <div className="register-page">
-            <h1>Register</h1>
-            <form className="register-form">
-                <div className="form-group">
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={form.username}
-                        onChange={handleChange}
-                        placeholder="johndoe"
-                        autoComplete="username"
-                        aria-label="Username"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={form.email}
-                        onChange={handleChange}
-                        placeholder="johndoe@example.com"
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password:</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={form.password}
-                        onChange={handleChange}
-                        placeholder="••••••••"
-                        required
-                    />
-                </div>
-                {error && (
-                    <div className="form-error" role="alert" aria-live="assertive">
-                        {error}
-                    </div>
-                )}
-                <button type="submit" className="register-btn" onClick={handleSubmit} disabled={loading}>
-                    {loading ? "Registering..." : "Register"}
-                </button>
-            </form>
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError("Please enter a valid email address.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await axiosClient.post("/auth/register", form);
+      if (res.status !== 201) throw new Error("Registration failed");
+      alert("Registration successful!");
+      navigate("/login");
+    } catch (error: any) {
+      const fallback = "Registration failed. Please try again.";
+      const messages = error.response?.data?.errors;
+      if (Array.isArray(messages)) {
+        setError(messages.map((e: { message: string }) => e.message).join("\n"));
+      } else {
+        setError(error.response?.data?.message || fallback);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const passwordStrength = getPasswordStrength(form.password);
+
+  return (
+    <div className="register-page">
+      <h1>Register</h1>
+      <form className="register-form" onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="username">Username:</label>
+          <input
+            id="username"
+            name="username"
+            value={form.username}
+            onChange={handleChange}
+            placeholder="johndoe"
+            required
+          />
         </div>
-    );
+
+        <div className="form-group">
+          <label htmlFor="email">Email:</label>
+          <input
+            id="email"
+            name="email"
+            type="email"
+            value={form.email}
+            onChange={handleChange}
+            placeholder="johndoe@example.com"
+            required
+          />
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="password">Password:</label>
+          <div className="input-wrapper">
+            <input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              value={form.password}
+              onChange={handleChange}
+              placeholder="••••••••"
+              required
+            />
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label="Toggle Password"
+            >
+              <FontAwesomeIcon icon={showPassword ? faEyeSlash : faEye} />
+            </button>
+          </div>
+          {form.password && (
+            <div className={`strength ${passwordStrength}`}>
+              Password Strength: {passwordStrength}
+            </div>
+          )}
+        </div>
+
+        <div className="form-group">
+          <label htmlFor="confirm_password">Confirm Password:</label>
+          <div className="input-wrapper">
+            <input
+              id="confirm_password"
+              name="confirm_password"
+              type={showConfirm ? "text" : "password"}
+              value={confirmPassword}
+              onChange={handleChange}
+              placeholder="••••••••"
+              required
+            />
+            <span
+              className={`check-icon ${
+                confirmPassword
+                  ? form.password === confirmPassword
+                    ? "match"
+                    : "no-match"
+                  : ""
+              }`}
+            >
+              <FontAwesomeIcon
+                icon={
+                  form.password === confirmPassword
+                    ? faCheckCircle
+                    : faTimesCircle
+                }
+              />
+            </span>
+            <button
+              type="button"
+              className="toggle-password"
+              onClick={() => setShowConfirm((prev) => !prev)}
+              aria-label="Toggle Confirm Password"
+            >
+              <FontAwesomeIcon icon={showConfirm ? faEyeSlash : faEye} />
+            </button>
+          </div>
+        </div>
+
+        {error && <div className="form-error">{error}</div>}
+
+        <button type="submit" className="register-btn" disabled={loading}>
+          {loading ? "Registering..." : "Register"}
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default RegisterPage;

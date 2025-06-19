@@ -57,7 +57,7 @@ body {
 
 .cta-button:hover {
   background-color: #ffcccc;
-  color: #ff0000;
+  color: #d12828;
   text-decoration: none;
   transition: background-color 0.3s ease, color 0.3s ease;
 }

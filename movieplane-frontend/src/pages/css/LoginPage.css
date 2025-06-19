@@ -4,17 +4,19 @@
   min-height: 90vh;
   display: flex;
   justify-content: center;
-  background: #f7f8fa;
-  padding: 16px;
+  padding: 5px;
+  margin: 0 6px;
+  background: #f8fafc;
+  opacity: 0.8;
 }
 
 .login-box {
   background: #fff;
   padding: 12px 24px;
   border-radius: 12px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
   width: 100%;
-  max-width: 370px;
+  max-width: 350px;
   display: flex;
   flex-direction: column;
   gap: 24px;
@@ -68,7 +70,7 @@
 .login-button {
   width: 100%;
   padding: 12px 0;
-  background: #2563eb;
+  background: #00bcd4;
   color: #fff;
   font-size: 1.1rem;
   font-weight: 600;
@@ -94,30 +96,6 @@
 
 .login-button:hover,
 .login-button:focus {
-  background: #10235f;
+  background: rgb(12, 23, 88);
 }
 
-/* Tablet styles */
-@media (min-width: 600px) {
-  .login-box {
-    padding: 40px 32px;
-    min-width: 90%;
-  }
-  .login-title {
-    font-size: 2.2rem;
-  }
-}
-
-/* Laptop/Desktop styles */
-@media (min-width: 1024px) {
-  .login-container {
-    padding: 0;
-  }
-  .login-box {
-    padding: 48px 40px;
-    max-width: 480px;
-  }
-  .login-title {
-    font-size: 2.5rem;
-  }
-}

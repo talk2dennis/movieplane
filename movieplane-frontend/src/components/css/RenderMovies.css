@@ -79,7 +79,7 @@
 
 
 .movie-card button:hover {
-    background-color: #e53935;
+    background-color: #d12828;
 }
 
 .mDescription {
@@ -95,7 +95,7 @@
 }
 
 /* View More Button */
-.view-more-btn {
+.movie-card .view-more-btn {
     display: block;
     margin: 1rem auto 2rem;
     padding: 0.75rem 2rem;
@@ -108,8 +108,8 @@
     transition: background-color 0.3s ease;
 }
 
-.view-more-btn:hover {
-    background-color: tomato;
+.movie-card .view-more-btn:hover {
+    background-color: #d12828;
 }
 
 /* error */

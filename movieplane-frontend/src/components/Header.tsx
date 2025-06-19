@@ -3,6 +3,10 @@ import { NavLink } from 'react-router-dom';
 import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './css/Header.css';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faSearch
+} from "@fortawesome/free-solid-svg-icons";
 
 export default function Header() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -18,7 +22,8 @@ export default function Header() {
       <div className="logo">🎬 MoviePlane</div>
 
       <div className="search-bar">
-        <input type="text" placeholder="Search movies..." />
+        <div className="search-icon"><FontAwesomeIcon icon={faSearch} color='white ' /></div>
+        <input type="text" placeholder="Search movies..." className='search-input' />
       </div>
 
       <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>

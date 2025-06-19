@@ -24,7 +24,7 @@ const MovieSection: React.FC<Props> = ({ title, movies, detail=false }) => {
     if (isAuthenticated) {
       navigate(`/movies/${movieId}`);
     } else {
-      if (window.confirm("Please log in to view movie details. Do you want to go to the login page?")) {
+      if (window.confirm("Please log in to view movie details.\n\nDo you want to go to the login page?")) {
         navigate("/login");
       }
     }
@@ -53,7 +53,7 @@ const MovieSection: React.FC<Props> = ({ title, movies, detail=false }) => {
               </>
             )}
             <button onClick={() => handleShowDetails(movie.tmdb_id)}>
-              {movie.tmdb_id}
+              {movie.title}
             </button>
           </div>
         ))}
