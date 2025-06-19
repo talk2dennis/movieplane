@@ -7,7 +7,6 @@ import MovieSection from "../components/RenderMovie";
 import Loading from "../components/Loading";
 import axiosClient from "../api/axiosClient";
 import "./css/MovieDetailPage.css";
-import { useAuth } from '../contexts/AuthContext';
 
 
 const MovieDetailPage: React.FC = () => {
@@ -16,7 +15,6 @@ const MovieDetailPage: React.FC = () => {
     const [recommendedMovies, setRecommendedMovies] = useState<IMovie[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-	 const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const fetchMovie = async () => {
