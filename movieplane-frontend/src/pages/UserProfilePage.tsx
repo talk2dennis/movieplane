@@ -1,62 +1,41 @@
 // src/pages/UserProfilePage.tsx
-import { useState } from 'react';
+
 import { useAuth } from '../contexts/AuthContext';
 import './css/UserProfilePage.css';
+import axiosClient from '../api/axiosClient';
+import Loading from '../components/Loading';
+import MovieSection from '../components/RenderMovie';
 
-const genre = [
-    'Action',
-    'Drama',
-    'Comedy',
-    'Sci-Fi',
-    'Horror',
-    'Romance',
-]
-
-const dummyRecommended = Array.from({ length: 10 }, (_, i) => ({
-    id: i + 1,
-    title: `Recommended Movie ${i + 1}`,
-    poster: `https://placehold.co/150x220?text=R${i + 1}`,
-}));
-
-const dummySaved = Array.from({ length: 6 }, (_, i) => ({
-    id: i + 1,
-    title: `Saved Movie ${i + 1}`,
-    poster: `https://placehold.co/150x220?text=S${i + 1}`,
-}));
 
 export default function UserProfilePage() {
-    const [genres, setGenres] = useState<string[]>(genre);
-    const [recommended, setRecommended] = useState(dummyRecommended);
 
     const { user, loading } = useAuth();
 
-    const handleGenreToggle = (genre: string) => {
-        setGenres(prev =>
-            prev.includes(genre)
-                ? prev.filter(g => g !== genre)
-                : [...prev, genre]
-        );
-    };
 
-    const handleLoadMore = () => {
-        const more = Array.from({ length: 5 }, (_, i) => ({
-            id: recommended.length + i + 1,
-            title: `Recommended Movie ${recommended.length + i + 1}`,
-            poster: `https://placehold.co/150x220?text=R${recommended.length + i + 1}`,
-        }));
-        setRecommended([...recommended, ...more]);
-    };
+    const handleDeleteAccount = async () => {
+        // if user confirms, send delete request
+        if (window.confirm("Are you sure you want to delete your account? This action cannot be undone.")) {
+            // Call API to delete account
+            try {
+                const res = await axiosClient.delete('/users/delete');
+                if (res.status === 200) {
+                    alert("Account deleted successfully.");
+                    window.location.href = '/login'; // Redirect to login page
+                }
+            } catch (error) {
+                console.error("Failed to delete account:", error);
+                alert("Failed to delete account. Please try again later.");
+            }
+        }
 
-    const handleDeleteAccount = () => {
-        alert('Are you sure you want to delete your account?');
     };
 
     if (loading) {
-        return <div className='loading'>Loading profile...</div>;
+        return <Loading />;
     }
     if (!user) {
         window.location.href = '/login';
-        return null;
+        return;
     }
     return (
         <div className="profile-container">
@@ -66,45 +45,27 @@ export default function UserProfilePage() {
                 <h1>{user.username}</h1>
                 <p>Email: {user.email}</p>
                 <p>Joined: {new Date(user.createdAt).toLocaleDateString()}</p>
-
-                <h2>Preferred Genres</h2>
-                <div className="genres">
-                    {['Action', 'Drama', 'Comedy', 'Sci-Fi', 'Horror', 'Romance'].map((genre) => (
-                        <button
-                            key={genre}
-                            className={`genre-btn ${genres.includes(genre) ? 'selected' : ''}`}
-                            onClick={() => handleGenreToggle(genre)}
-                        >
-                            {genre}
-                        </button>
-                    ))}
-                </div>
             </section>
 
-            {/* Recommended Movies Section */}
-            <section className="section recommended" id="recommended">
-                <h2>Recommended Movies</h2>
-                <div className="movie-grid">
-                    {recommended.map(movie => (
-                        <img key={movie.id} src={movie.poster} alt={movie.title} />
-                    ))}
-                </div>
-                <button className="more-btn" onClick={handleLoadMore}>Load More</button>
-            </section>
+            {/* Favorites Movies Section */}
+            {user.favorites_movies && user.favorites_movies.length > 0 && (
+                <MovieSection
+                    title="Favorite Movies"
+                    movies={user.favorites_movies}
+                />
+            )}
+            {/* Watchlist Movies Section */}
+            {user.watchlist_movies && user.watchlist_movies.length > 0 && (
+                <MovieSection
+                    title="Watchlist Movies"
+                    movies={user.watchlist_movies}
+                />
+            )}
 
-            {/* Saved Movies + Actions Section */}
-            <section className="section saved" id="saved">
-                <h2>Saved / Liked Movies</h2>
-                <div className="movie-grid">
-                    {dummySaved.map(movie => (
-                        <img key={movie.id} src={movie.poster} alt={movie.title} />
-                    ))}
-                </div>
-
-                <div className="actions">
-                    <button className="edit-btn">Edit Profile</button>
-                    <button className="delete-btn" onClick={handleDeleteAccount}>Delete Account</button>
-                </div>
+            {/* Account Section */}
+            <section className="section account" id="account">
+                <h2>Account Settings</h2>
+                <button className="delete-account-btn" onClick={handleDeleteAccount}>Delete Account</button>
             </section>
         </div>
     );

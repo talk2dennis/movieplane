@@ -26,7 +26,7 @@ const HomePage: React.FC = () => {
                 setMovies(JSON.parse(storedMovies));
                 setTrendingMovies(JSON.parse(storedTrendingMovies));
                 setLoading(false);
-                return;
+                // return;
             }
 
             try {

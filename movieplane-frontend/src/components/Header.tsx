@@ -44,11 +44,11 @@ export default function Header() {
           <>
             <NavLink to="/favorites" className="nav-link" onClick={() => setMenuOpen(false)}>
               Favorites
-              <span className='notification'> ({user?.favorites_movies.length})</span>
+              <span className='notification'> ({user?.favorites_movies?.length ?? 0})</span>
             </NavLink>
             <NavLink to="/watchlist" className="nav-link" onClick={() => setMenuOpen(false)}>
               Watchlist
-              <span className='notification'> ({user?.watchlist_movies.length})</span>
+              <span className='notification'> ({user?.watchlist_movies?.length ?? 0})</span>
             </NavLink>
             <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">{user?.username}</span></NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>

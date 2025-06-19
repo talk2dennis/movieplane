@@ -1,0 +1,81 @@
+.contact-container {
+  max-width: 600px;
+  margin: 10px auto;
+  padding: 2rem 1rem;
+  background: #fff;
+  color: #22223b;
+  border-radius: 8px;
+  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+}
+
+.contact-container h1 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+  text-align: center;
+  color: #2a2a72;
+}
+
+.contact-container p {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #4a4e69;
+}
+
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  color: #333;
+}
+
+.form-group input,
+.form-group textarea {
+  padding: 0.75rem 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  background: #f5f7fa;
+  color: #222;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: #5f6fff;
+  outline: none;
+}
+
+.contact-btn {
+  background-color: #5f6fff;
+  color: white;
+  padding: 0.8rem 1.5rem;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out;
+}
+
+.contact-btn:hover {
+  background-color: #3d47d6;
+}
+
+.thank-you {
+  text-align: center;
+  color: #2a2a72;
+}
+
+.thank-you h3 {
+  font-size: 1.6rem;
+  margin-bottom: 0.5rem;
+}

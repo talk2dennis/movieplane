@@ -6,6 +6,7 @@ import type { IMovie } from "../types";
 import MovieSection from "../components/RenderMovie";
 import Loading from "../components/Loading";
 import axiosClient from "../api/axiosClient";
+import { useAuth } from "../contexts/AuthContext";
 import "./css/MovieDetailPage.css";
 
 
@@ -16,9 +17,27 @@ const MovieDetailPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const { isAuthenticated, user, setUser } = useAuth();
+
+    // function to check if movie is in favorites or watchlist
+    const isInFavorites = (movieId: number) => {
+        return user?.favorites_movies?.some(fav => fav.tmdb_id === movieId);
+    };
+
+    const isInWatchlist = (movieId: number) => {
+        return user?.watchlist_movies?.some(watch => watch.tmdb_id === movieId);
+    };
+
     useEffect(() => {
         const fetchMovie = async () => {
             try {
+                // check if user is authenticated
+                if (!isAuthenticated && !user) {
+                    // // display message to user and redirect to homepage
+                    alert("You need to be logged in to view movie details.");
+                    window.location.href = "/";
+                    return;
+                }
                 setLoading(true);
                 const res = await axiosClient.get<IMovie>(`movies/${movieId}`);
                 const recommendedRes = await axiosClient.get<IMovie[]>(`movies/${movieId}/recommendations`);
@@ -35,13 +54,36 @@ const MovieDetailPage: React.FC = () => {
     }, [movieId]);
 
     // to add favorites
-    const handleAddFavorite = async(movieId: number) => {
+    const handleAddFavorite = async (movie: IMovie) => {
         setLoading(true);
         try {
-            const res = await axiosClient.post<{message: string}>('users/favorites/toggle', {movieId});
-            alert(res.data.message);
+            const res = await axiosClient.post<{ message: string }>('users/favorites/toggle', { movieId });
+            // Update user state to reflect the change
+            if (res.data.message.includes("added")) {
+                // If movie was added to favorites, add it to user's favorites
+                setUser(prevUser => {
+                    if (!prevUser) return prevUser;
 
-        } catch(error) {
+                    return {
+                        ...prevUser,
+                        favorites_movies: [
+                            ...prevUser.favorites_movies,
+                            movie
+                        ]
+                    };
+                });
+            } else {
+                // If movie was removed from favorites, filter it out
+                setUser(prevUser => {
+                    if (!prevUser) return prevUser;
+                    return {
+                        ...prevUser,
+                        favorites_movies: prevUser.favorites_movies.filter(fav => fav.tmdb_id !== movie.tmdb_id)
+                    };
+                });
+            }
+            alert(res.data.message);
+        } catch (error) {
             alert("Failed to add or remove movie to favorites");
         } finally {
             setLoading(false);
@@ -49,14 +91,14 @@ const MovieDetailPage: React.FC = () => {
     }
 
     // to add watchlist
-    const handleAddWatchlist = async(movieId: number) => {
+    const handleAddWatchlist = async (movieId: number) => {
         try {
             setLoading(true);
-            const res = await axiosClient.post<{message: string}>('users/watchlist/toggle', {movieId});
+            const res = await axiosClient.post<{ message: string }>('users/watchlist/toggle', { movieId });
             console.log(res.data);
             alert(res.data.message);
 
-        } catch(error: any) {
+        } catch (error: any) {
             alert(`Failed to add or remove movie to watchlist: ${error.message}`);
         } finally {
             setLoading(false);
@@ -89,8 +131,18 @@ const MovieDetailPage: React.FC = () => {
                         <p><strong>Rating:</strong> {movie.vote_average}</p>
 
                         <div className="actions">
-                            <button className="fav-btn" onClick={()=>handleAddFavorite(movie.tmdb_id)}>Add to Favorites</button>
-                            <button className="watch-btn" onClick={()=>handleAddWatchlist(movie.tmdb_id)}>Add to Watchlist</button>
+                            <button
+                                className={isInFavorites(movie.tmdb_id) ? "fav-btn" : "watch-btn"}
+                                onClick={() => handleAddFavorite(movie)}
+                            >
+                                {isInFavorites(movie.tmdb_id) ? "Remove from Favorites" : "Add to Favorites"}
+                            </button>
+                            <button
+                                className={isInWatchlist(movie.tmdb_id) ? "fav-btn" : "watch-btn"}
+                                onClick={() => handleAddWatchlist(movie.tmdb_id)}
+                            >
+                                {isInWatchlist(movie.tmdb_id) ? "Remove from Watchlist" : "Add to Watchlist"}
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -12,6 +12,9 @@ import Header from './components/Header';
 import Footer from './components/Footer';
 import Favorites from './pages/Favorites';
 import Watchlist from './pages/Watchlist';
+import AboutPage from './pages/About';
+import PrivacyPage from './pages/Privacy';
+import ContactPage from './pages/Contact';
 
 interface PrivateRouteProps {
     children: React.ReactElement;
@@ -37,8 +40,9 @@ const AppRoutes: React.FC = () => {
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path='/movies/:movieId' element={<MovieDetailPage />} />
-                <Route path="/about" element={<div>About Page</div>} />
-                <Route path="/contact" element={<div>Contact Page</div>} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/About" element={<AboutPage />}/>
+                <Route path="/contact" element={<ContactPage />} />
 
                 {/* Protected Routes */}
                 <Route path="/profile" element={
@@ -62,6 +66,7 @@ const AppRoutes: React.FC = () => {
                         <Watchlist />
                     </PrivateRoute>
                 } />
+                
 
                 {/* Redirect unknown paths */}
                 <Route path="*" element={<Navigate to="/" replace />} />
