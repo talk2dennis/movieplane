@@ -6,7 +6,7 @@
   background: #f8fafc;
   opacity: 0.8;
   padding: 5px;
-  margin: 0 6px;
+  margin: 0;
   color: black;
 }
 
@@ -32,7 +32,6 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
 }
 
 .form-group label {

@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import './index.css';
 
 // Import pages
 import LoginPage from './pages/LoginPage';
@@ -8,6 +9,9 @@ import HomePage from './pages/HomePage';
 import UserProfilePage from './pages/UserProfilePage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import Header from './components/Header';
+import Footer from './components/Footer';
+import Favorites from './pages/Favorites';
+import Watchlist from './pages/Watchlist';
 
 interface PrivateRouteProps {
     children: React.ReactElement;
@@ -47,10 +51,22 @@ const AppRoutes: React.FC = () => {
                         <MovieDetailPage />
                     </PrivateRoute>
                 } />
+                <Route path="/favorites" element={
+                    <PrivateRoute>
+                        <Favorites />
+                    </PrivateRoute>
+                } />
+
+                <Route path="/watchlist" element={
+                    <PrivateRoute>
+                        <Watchlist />
+                    </PrivateRoute>
+                } />
 
                 {/* Redirect unknown paths */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            <Footer />
         </Router>
     );
 };

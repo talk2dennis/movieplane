@@ -11,15 +11,19 @@ import {
 export default function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  //   const navigate = useNavigate();
+
 
   const handleLogout = () => {
     logout();
   };
 
+
   return (
     <header className="app-header">
-      <div className="logo">🎬 MoviePlane</div>
+      <div className="logo-container">
+        <div className='logo'>🎬</div>
+        <h1 className="app-title">MoviePlane</h1>
+      </div>
 
       <div className="search-bar">
         <div className="search-icon"><FontAwesomeIcon icon={faSearch} color='white ' /></div>
@@ -38,8 +42,14 @@ export default function Header() {
 
         {isAuthenticated && (
           <>
-            <NavLink to="/favorites" className="nav-link" onClick={() => setMenuOpen(false)}>Favorites</NavLink>
-            <NavLink to="/watchlist" className="nav-link" onClick={() => setMenuOpen(false)}>Watchlist</NavLink>
+            <NavLink to="/favorites" className="nav-link" onClick={() => setMenuOpen(false)}>
+              Favorites
+              <span className='notification'> ({user?.favorites_movies.length})</span>
+            </NavLink>
+            <NavLink to="/watchlist" className="nav-link" onClick={() => setMenuOpen(false)}>
+              Watchlist
+              <span className='notification'> ({user?.watchlist_movies.length})</span>
+            </NavLink>
             <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">{user?.username}</span></NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>
           </>

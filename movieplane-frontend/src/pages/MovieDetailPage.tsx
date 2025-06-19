@@ -34,12 +34,41 @@ const MovieDetailPage: React.FC = () => {
         fetchMovie();
     }, [movieId]);
 
+    // to add favorites
+    const handleAddFavorite = async(movieId: number) => {
+        setLoading(true);
+        try {
+            const res = await axiosClient.post<{message: string}>('users/favorites/toggle', {movieId});
+            alert(res.data.message);
+
+        } catch(error) {
+            alert("Failed to add or remove movie to favorites");
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // to add watchlist
+    const handleAddWatchlist = async(movieId: number) => {
+        try {
+            setLoading(true);
+            const res = await axiosClient.post<{message: string}>('users/watchlist/toggle', {movieId});
+            console.log(res.data);
+            alert(res.data.message);
+
+        } catch(error: any) {
+            alert(`Failed to add or remove movie to watchlist: ${error.message}`);
+        } finally {
+            setLoading(false);
+        }
+    }
     if (loading) return <Loading />;
     if (error) return <div className="error">{error}</div>;
     if (!movie) return <div className="error">Movie not found.</div>;
 
     return (
         <div className="movie-detail-container">
+            {/* {loading && <div className="loading">{<Loading />}</div>} */}
             <div
                 className="movie-detail-page"
                 style={{
@@ -60,8 +89,8 @@ const MovieDetailPage: React.FC = () => {
                         <p><strong>Rating:</strong> {movie.vote_average}</p>
 
                         <div className="actions">
-                            <button className="fav-btn">Add to Favorites</button>
-                            <button className="watch-btn">Add to Watchlist</button>
+                            <button className="fav-btn" onClick={()=>handleAddFavorite(movie.tmdb_id)}>Add to Favorites</button>
+                            <button className="watch-btn" onClick={()=>handleAddWatchlist(movie.tmdb_id)}>Add to Watchlist</button>
                         </div>
                     </div>
                 </div>

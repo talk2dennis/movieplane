@@ -100,6 +100,18 @@
   background-color: #0f1b2b;
 }
 
+/* style for loading */
+.loading {
+  position: absolute;
+  top: 20%;
+  left: 30%;
+  background: #0f1b2b;
+  opacity: 0.8;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+}
+
 @media screen and (max-width: 768px) {
   .movie-detail-content {
     flex-direction: column;

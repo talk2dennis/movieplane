@@ -8,6 +8,10 @@ export interface IUser {
     isAdmin?: boolean;
     isAuthenticated?: boolean;
     profilePicture?: string;
+    favorites_movies: IMovie[];
+    watchlist_movies: IMovie[];
+    followers?: string[];
+    following?: string[];
 }
 
 // interface IMovie 

@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 console.log("User loaded from token:", data.user);
             } catch (error) {
                 console.error("Failed to load user from token:", error);
-                logout(false); // prevent redirect during effect
+                logout(false);
             } finally {
                 setLoading(false);
             }

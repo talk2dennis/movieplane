@@ -1,7 +1,7 @@
 /* LoginPage.css */
 
 .login-container {
-  min-height: 90vh;
+  min-height: 70vh;
   display: flex;
   justify-content: center;
   padding: 5px;
@@ -30,16 +30,18 @@
   text-align: center;
 }
 
-.form-group {
+.login-box .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  margin: 16px;
 }
 
 .form-label {
   font-size: 1rem;
   color: #444;
   font-weight: 500;
+  margin-bottom: 6px;
+  transition: color 0.2s;
 }
 
 .form-input {
@@ -98,4 +100,3 @@
 .login-button:focus {
   background: rgb(12, 23, 88);
 }
-
