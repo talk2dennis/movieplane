@@ -2,6 +2,7 @@ import { useAuth } from "../contexts/AuthContext";
 import { useEffect, useState } from "react";
 import type { IMovie } from "../types";
 import MovieSection from "../components/RenderMovie";
+import "./css/Favorites.css";
 
 const Watchlist = () => {
   const { user, isAuthenticated } = useAuth();

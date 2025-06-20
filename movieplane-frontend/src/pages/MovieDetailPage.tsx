@@ -91,11 +91,34 @@ const MovieDetailPage: React.FC = () => {
     }
 
     // to add watchlist
-    const handleAddWatchlist = async (movieId: number) => {
+    const handleAddWatchlist = async (movie: IMovie) => {
         try {
             setLoading(true);
-            const res = await axiosClient.post<{ message: string }>('users/watchlist/toggle', { movieId });
-            console.log(res.data);
+            const res = await axiosClient.post<{ message: string }>('users/watchlist/toggle', { movieId: movie.tmdb_id });
+            // Update user state to reflect the change
+            if (res.data.message.includes("added")) {
+                // If movie was added to favorites, add it to user's favorites
+                setUser(prevUser => {
+                    if (!prevUser) return prevUser;
+
+                    return {
+                        ...prevUser,
+                        watchlist_movies: [
+                            ...prevUser.watchlist_movies,
+                            movie
+                        ]
+                    };
+                });
+            } else {
+                // If movie was removed from favorites, filter it out
+                setUser(prevUser => {
+                    if (!prevUser) return prevUser;
+                    return {
+                        ...prevUser,
+                        favorites_movies: prevUser.favorites_movies.filter(fav => fav.tmdb_id !== movie.tmdb_id)
+                    };
+                });
+            }
             alert(res.data.message);
 
         } catch (error: any) {
@@ -139,7 +162,7 @@ const MovieDetailPage: React.FC = () => {
                             </button>
                             <button
                                 className={isInWatchlist(movie.tmdb_id) ? "fav-btn" : "watch-btn"}
-                                onClick={() => handleAddWatchlist(movie.tmdb_id)}
+                                onClick={() => handleAddWatchlist(movie)}
                             >
                                 {isInWatchlist(movie.tmdb_id) ? "Remove from Watchlist" : "Add to Watchlist"}
                             </button>

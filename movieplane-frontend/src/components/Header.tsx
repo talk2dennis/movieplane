@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import './css/Header.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useNavigate } from 'react-router-dom';
 import {
   faSearch
 } from "@fortawesome/free-solid-svg-icons";
@@ -11,6 +12,21 @@ import {
 export default function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [query, setQuery] = useState('');
+  const navigate = useNavigate();
+
+
+  // function to handle movie search
+  const handleSearch = async () => {
+    if (query.trim() === '') {
+      alert('Please enter a search term');
+      return;
+    }
+    // redirect to search results page with query
+    navigate(`/search/${encodeURIComponent(query)}`);
+    // reset query input
+    setQuery('');
+  }
 
 
   const handleLogout = () => {
@@ -26,8 +42,14 @@ export default function Header() {
       </div>
 
       <div className="search-bar">
-        <div className="search-icon"><FontAwesomeIcon icon={faSearch} color='white ' /></div>
-        <input type="text" placeholder="Search movies..." className='search-input' />
+        <input
+          type="text"
+          value={query}
+          onChange={e => setQuery(e.target.value)}
+          placeholder="Search movies..."
+          className='search-input'
+        />
+        <div className="search-icon" onClick={handleSearch}><FontAwesomeIcon icon={faSearch} color='white ' /></div>
       </div>
 
       <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>

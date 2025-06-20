@@ -15,6 +15,7 @@ import Watchlist from './pages/Watchlist';
 import AboutPage from './pages/About';
 import PrivacyPage from './pages/Privacy';
 import ContactPage from './pages/Contact';
+import Search from './pages/Search';
 
 interface PrivateRouteProps {
     children: React.ReactElement;
@@ -43,6 +44,7 @@ const AppRoutes: React.FC = () => {
                 <Route path="/privacy" element={<PrivacyPage />} />
                 <Route path="/About" element={<AboutPage />}/>
                 <Route path="/contact" element={<ContactPage />} />
+                <Route path="/search/:query" element={<Search />} />
 
                 {/* Protected Routes */}
                 <Route path="/profile" element={

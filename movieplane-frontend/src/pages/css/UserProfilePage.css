@@ -3,15 +3,16 @@
   flex-direction: column;
   flex-wrap: wrap;
   align-items: center;
+  justify-content: center;
   padding: 20px;
   max-width: 1200px;
-  margin: auto;
+  margin: 0 auto;
 }
 
 section {
   width: 100%;
   max-width: 800px;
-  margin: 8px 0;
+  margin: 8px auto;
   border-radius: 10px;
   border-bottom: 1px solid #aca9a9;
 }
@@ -64,4 +65,28 @@ section {
   color: tomato;
   padding: 0;
   margin: 0;
+}
+
+.no-favorites, .no-watchlist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+  gap: 10px;
+  h2 {
+    font-size: 1.5rem;
+  }
+  a {
+    color: tomato;
+    &:hover {
+      background-color: tomato;
+      color: #f9f9f9;
+      padding: 5px;
+      text-decoration: none;
+      border-radius: 5px;
+      transition: all 0.5s ease;
+    }
+  }
 }

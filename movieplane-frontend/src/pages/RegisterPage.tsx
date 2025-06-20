@@ -3,6 +3,7 @@ import "./css/RegisterPage.css";
 import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Loading from "../components/Loading";
 import {
   faEye,
   faEyeSlash,
@@ -103,6 +104,9 @@ const RegisterPage: React.FC = () => {
 
   const passwordStrength = getPasswordStrength(form.password);
 
+  if (loading) {
+    return <Loading title="Registering... Please wait"/>;
+  }
   return (
     <div className="register-page">
       <h1>Register</h1>

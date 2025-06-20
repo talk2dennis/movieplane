@@ -23,11 +23,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         // Load user from token when component mounts or token changes
         const loadUser = async () => {
-            if (typeof window === "undefined") {
-                console.warn("AuthProvider: window is undefined, skipping user load.");
-                setLoading(false);
-                return;
-            }
             setLoading(true);
             if (!token) {
                 setUser(null);
@@ -70,7 +65,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, token, isAuthenticated: !!token && !!user, login, logout, loading }}>
+        <AuthContext.Provider value={{ user, setUser, token, isAuthenticated: !!user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );
