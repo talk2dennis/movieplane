@@ -71,3 +71,8 @@ CORS_ORIGIN=YOUR-URL
     ```
 
 The app should now be running locally. Access the frontend in your browser and enjoy MoviePlane!
+
+### Live Demo
+
+You can access MoviePlane online at [https://movieplane.vercel.app/](https://movieplane.vercel.app/).  
+On the site, you can create a new account, log in, and start exploring personalized movie recommendations right away. Enjoy discovering and managing your favorite movies with a seamless user experience.
