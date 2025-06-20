@@ -35,10 +35,10 @@ const HomePage: React.FC = () => {
                     axiosClient.get<IMovie[]>('movies/trending')
                 ]);
 
-                setMovies(popularRes.data || []);
-                localStorage.setItem('movies', JSON.stringify(popularRes.data || []));
-                setTrendingMovies(popularRes.data || []);
-                localStorage.setItem('trendingMovies', JSON.stringify(trendingRes.data || []));
+                setMovies(popularRes.data);
+                localStorage.setItem('movies', JSON.stringify(popularRes.data));
+                setTrendingMovies(trendingRes.data);
+                localStorage.setItem('trendingMovies', JSON.stringify(trendingRes.data));
             } catch (err) {
                 const errorMessage = err instanceof Error ? err.message : String(err);
                 setError(`Failed to load movies. Please try again later: ${errorMessage}`);

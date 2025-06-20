@@ -30,6 +30,11 @@ export default function UserProfilePage() {
 
     };
 
+    const handleEditProfile = () => {
+        // Redirect to edit profile page
+        window.location.href = '/edit-profile';
+    };
+
     if (loading) {
         return <Loading />;
     }
@@ -41,30 +46,42 @@ export default function UserProfilePage() {
         <div className="profile-container">
             {/* Profile Info Section */}
             <section className="section profile-info" id="profile-info">
-                <img src="http://" alt="Avatar" className="avatar" />
+                <div className="profile-picture">
+                    <div className="default-picture">
+                        {`${user.username.charAt(0).toUpperCase()} ${user.username.charAt(1).toUpperCase()}`}
+                    </div>
+                </div>
                 <h1>{user.username}</h1>
                 <p>Email: {user.email}</p>
                 <p>Joined: {new Date(user.createdAt).toLocaleDateString()}</p>
             </section>
 
             {/* Favorites Movies Section */}
-            {user.favorites_movies && user.favorites_movies.length > 0 && (
-                <MovieSection
-                    title="Favorite Movies"
-                    movies={user.favorites_movies}
-                />
-            )}
+            <section className="section favorites" id="favorites">
+                {user.favorites_movies && user.favorites_movies.length > 0 && (
+                    <MovieSection
+                        title="Favorite Movies"
+                        movies={user.favorites_movies}
+                    />
+                )}
+            </section>
             {/* Watchlist Movies Section */}
-            {user.watchlist_movies && user.watchlist_movies.length > 0 && (
-                <MovieSection
-                    title="Watchlist Movies"
-                    movies={user.watchlist_movies}
-                />
-            )}
+            <section className="section watchlist" id="watchlist">
+                {user.watchlist_movies && user.watchlist_movies.length > 0 && (
+                    <MovieSection
+                        title="Watchlist Movies"
+                        movies={user.watchlist_movies}
+                    />
+                )}
+            </section>
 
             {/* Account Section */}
             <section className="section account" id="account">
                 <h2>Account Settings</h2>
+                <p>Manage your account settings and preferences.</p>
+                <button className="edit-profile-btn" onClick={handleEditProfile}>
+                    Edit Profile
+                </button>
                 <button className="delete-account-btn" onClick={handleDeleteAccount}>Delete Account</button>
             </section>
         </div>
