@@ -54,7 +54,7 @@ section {
   margin-bottom: 20px;
 }
 
-.default-picture {
+.default-picture, .profile-picture img {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -65,6 +65,11 @@ section {
   color: tomato;
   padding: 0;
   margin: 0;
+  border: 1px solid tomato;
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  transition: all 0.3s ease;
 }
 
 .no-favorites, .no-watchlist {
