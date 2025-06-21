@@ -1,13 +1,12 @@
 import { useAuth } from '../contexts/AuthContext';
 import './css/UserProfilePage.css';
 import axiosClient from '../api/axiosClient';
-import Loading from '../components/Loading';
 import MovieSection from '../components/RenderMovie';
 
 
 export default function UserProfilePage() {
 
-    const { user, loading, isAuthenticated, token } = useAuth();
+    const { user, logout, isAuthenticated, token } = useAuth();
 
 
     const handleDeleteAccount = async () => {
@@ -33,10 +32,10 @@ export default function UserProfilePage() {
         window.location.href = '/edit-profile';
     };
 
-    if (loading) {
-        return <Loading title='Loading user data'/>;
-    }
     if (!user || !isAuthenticated) {
+        logout(); // Clear token and user data
+        localStorage.removeItem("token");
+        alert("You need to be logged in to view your profile.");
         window.location.href = '/login';
         return;
     } else localStorage.setItem("token", token || "");
@@ -46,7 +45,13 @@ export default function UserProfilePage() {
             <section className="section profile-info" id="profile-info">
                 <div className="profile-picture">
                     <div className="default-picture">
-                        {`${user.username.charAt(0).toUpperCase()} ${user.username.charAt(1).toUpperCase()}`}
+                        {user.profilePicture ? (
+                            <img src={user.profilePicture} alt={`${user.username}'s profile`} />
+                        ) : (
+                            <div className="placeholder">
+                                <span>{`${user.username.charAt(0).toUpperCase()}${user.username.charAt(1).toUpperCase()}`}</span>
+                            </div>
+                        )}
                     </div>
                 </div>
                 <h1>{user.username}</h1>
@@ -76,7 +81,7 @@ export default function UserProfilePage() {
                         title="Watchlist Movies"
                         movies={user.watchlist_movies}
                     />
-                ): (
+                ) : (
                     <div className="no-watchlist">
                         <h2>No Watchlist Found</h2>
                         <p>It seems you haven't added any movies to your watchlist yet.</p>
