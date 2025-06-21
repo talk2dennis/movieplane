@@ -1,9 +1,91 @@
 import { Request, Response, NextFunction } from "express";
-import User from "../models/user.model";
+import User, { IUser } from "../models/user.model";
 import jwt from "jsonwebtoken";
-import { JWT_SECRET } from "../config/env.check";
+import { JWT_SECRET, GOOGLE_CLIENT_ID } from "../config/env.check";
 import { console } from "inspector";
+import { OAuth2Client } from 'google-auth-library';
 
+// Initialize Google OAuth2 client
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
+
+// helper to generate token
+const generateAppToken = (user: IUser) => {
+    return jwt.sign(
+        { id: user._id, username: user.username, email: user.email },
+        JWT_SECRET,
+        { expiresIn: '3h' }
+    );
+};
+// for google auth
+export const googleAuth = async (req: Request, res: Response, next: NextFunction) => {
+    const { id_token } = req.body;
+    if (!id_token) {
+        return res.status(400).json({ message: "ID token is required" });
+    }
+
+    try {
+        // Verify the ID token
+        const ticket = await client.verifyIdToken({
+            idToken: id_token,
+            audience: GOOGLE_CLIENT_ID,
+        });
+
+        // Get the payload from the user
+        const payload = ticket.getPayload();
+        if (!payload || !payload.sub || !payload.email) {
+            return res.status(401).json({ message: 'Invalid Google ID token payload.' });
+        }
+        const googleId = payload.sub; // Google's unique user ID
+        const email = payload.email;
+        const username = payload.name || payload.email.split('@')[0];
+
+        // Check if user already exists
+        let user = await User.findOne({ $or: [{ google_id: googleId }, { email: email }] });
+        if (user) {
+            // User exists
+            if (!user.google_id) {
+                // If existing user (e.g., signed up with email/password) logs in with Google for first time
+                user.google_id = googleId;
+                user.profilePicture = payload.picture || '';
+                await user.save();
+            }
+            // Ensure username is updated if it came from Google and was empty/generic
+            if (!user.username && payload.name) {
+                user.username = payload.name;
+                await user.save();
+            }
+        } else {
+            // User does not exist, create new user
+            user = new User({
+                google_id: googleId,
+                profilePicture: payload.picture || '',
+                email: email,
+                username: username,
+            });
+            await user.save();
+        }
+
+        // Generate JWT token
+        const token = generateAppToken(user);
+
+        // Respond with user data and token
+        res.status(200).json({
+            message: "Google authentication successful",
+            user: {
+                id: user._id,
+                username: user.username,
+                email: user.email,
+                profilePicture: user.profilePicture,
+            },
+            token,
+        });
+    } catch (error: any) {
+        if (error.code === 'ERR_INVALID_AUDIENCE') {
+            return res.status(401).json({ message: 'Invalid Google Client ID for token verification.' });
+        }
+        next(error);
+    }
+}
 
 // Controller for user registration
 export const registerUser = async (req: Request, res: Response, next: NextFunction) => {

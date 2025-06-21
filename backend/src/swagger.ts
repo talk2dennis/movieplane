@@ -20,7 +20,7 @@ const options = {
       title: "MoviePlane API",
       version: "0.1.0",
       description:
-        "MoviePlane API swagger documentation. This API allows you to create, read, update, and delete movies.",
+        "MoviePlane API swagger documentation. This API allows you to create, read, update, and delete movies.\n Visit [MoviePlane](https://movieplane.vercel.app) for more information.",
       license: {
         name: "MIT",
         url: "https://spdx.org/licenses/MIT.html",

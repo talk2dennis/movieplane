@@ -4,6 +4,7 @@ import { useAuth } from "../contexts/AuthContext";
 import type { IUser } from "../types";
 import "./css/LoginPage.css";
 import Loading from "../components/Loading";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 
 
 // login logic
@@ -54,7 +55,7 @@ const LoginPage = () => {
         // Clear error when email or password changes
         setError("");
     }, [email, password]);
-    
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         e.stopPropagation();
@@ -84,9 +85,14 @@ const LoginPage = () => {
         }
     };
 
+    // handle error from google sign in
+    const handleGoogleSignInError = (message: string) => {
+        setError(message);
+    };
+
     // if loading, show a loading spinner or message
     if (loading) {
-        return <Loading title="Please wait while we get your data"/>;
+        return <Loading title="Please wait while we get your data" />;
     }
 
 
@@ -133,7 +139,7 @@ const LoginPage = () => {
                         </div>
                     )}
                     <button
-                       onClick={handleSubmit}
+                        onClick={handleSubmit}
                         className="login-button"
                         aria-label="Login"
                         disabled={loading}
@@ -141,7 +147,13 @@ const LoginPage = () => {
                     >
                         Login
                     </button>
+                    <div className="login-footer">
+                        Don't have an account? <a href="/register">Register here</a>
+                    </div>
                 </form>
+            </div>
+            <div className="footer-container">
+                <GoogleSignInButton onError={handleGoogleSignInError} />
             </div>
         </div>
     );

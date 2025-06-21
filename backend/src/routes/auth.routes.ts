@@ -1,11 +1,16 @@
 import { Router } from "express";
-import { registerUser, loginUser, getCurrentUser } from "../controllers/auth.controller";
+import { registerUser, loginUser, getCurrentUser, googleAuth } from "../controllers/auth.controller";
 import { registerValidation, loginValidation } from "../validators/auth.validator";
 import { validateRequest } from "../middleware/validation.middleware";
 import { protect } from "../middleware/auth.middleware";
 
 const router = Router();
 
+// Route for Google authentication
+router.post(
+    "/google",
+    googleAuth
+);
 // Route for user registration
 router.post(
     "/register",
@@ -31,6 +36,77 @@ router.get(
 // Export the router
 export default router;
 
+// Swagger documentation for Google authentication route
+/**
+ * @swagger
+ * /api/auth/google:
+ *   post:
+ *     summary: Authenticate user via Google OAuth
+ *     tags: [Auth]
+ *     description: Authenticate a user using Google OAuth. The user must provide a valid Google ID token in the request body.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - id_token
+ *             properties:
+ *               id_token:
+ *                 type: string
+ *                 description: Google ID token
+ *                 example: ya29.a0AfH6SMB...
+ *     responses:
+ *       200:
+ *         description: User successfully authenticated with Google
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Google authentication successful
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: string
+ *                       example: "64ab3c8c5f4a3c001234abcd"
+ *                     username:
+ *                       type: string
+ *                       example: johndoe
+ *                     email:
+ *                       type: string
+ *                       example: johndoe@example.com
+ *                     profilePicture:
+ *                       type: string
+ *                       example: https://example.com/profile-picture.png
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       401:
+ *         description: Unauthorized - Invalid or missing Google token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Unauthorized - Invalid or missing Google token
+ *       500:
+ *         description: Internal server error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                   example: Internal server error
+ */
 
 // Swagger documentation for auth routes
 /**

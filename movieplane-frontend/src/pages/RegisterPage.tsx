@@ -4,6 +4,7 @@ import axiosClient from "../api/axiosClient";
 import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loading from "../components/Loading";
+import GoogleSignInButton from "../components/GoogleSignInButton";
 import {
   faEye,
   faEyeSlash,
@@ -24,6 +25,11 @@ const RegisterPage: React.FC = () => {
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
 
+  const handleGoogleSignInError = (error: any) => {
+    setError(error);
+  };
+
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setError(null);
     const { name, value } = e.target;
@@ -105,7 +111,7 @@ const RegisterPage: React.FC = () => {
   const passwordStrength = getPasswordStrength(form.password);
 
   if (loading) {
-    return <Loading title="Registering... Please wait"/>;
+    return <Loading title="Registering... Please wait" />;
   }
   return (
     <div className="register-page">
@@ -177,13 +183,12 @@ const RegisterPage: React.FC = () => {
               required
             />
             <span
-              className={`check-icon ${
-                confirmPassword
-                  ? form.password === confirmPassword
-                    ? "match"
-                    : "no-match"
-                  : ""
-              }`}
+              className={`check-icon ${confirmPassword
+                ? form.password === confirmPassword
+                  ? "match"
+                  : "no-match"
+                : ""
+                }`}
             >
               <FontAwesomeIcon
                 icon={
@@ -209,7 +214,13 @@ const RegisterPage: React.FC = () => {
         <button type="submit" className="register-btn" disabled={loading}>
           {loading ? "Registering..." : "Register"}
         </button>
+        <div className="login-footer">
+          Already have an account? <a href="/login">Login here</a>
+        </div>
       </form>
+      <div className="footer-container">
+        <GoogleSignInButton onError={handleGoogleSignInError} />
+      </div>
     </div>
   );
 };

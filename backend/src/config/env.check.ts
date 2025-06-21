@@ -10,6 +10,7 @@ const checkEnvVariables = () => {
     'JWT_SECRET',
     'JWT_EXPIRATION',
     'CORS_ORIGIN',
+    'GOOGLE_CLIENT_ID',
   ];
   for (const envVar of requiredEnvVars) {
     if (!process.env[envVar]) {
@@ -31,3 +32,4 @@ export const JWT_EXPIRATION = process.env.JWT_EXPIRATION || '1h';
 export const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
 export const MOVIE_API_KEY = process.env.MOVIE_API_KEY
 export const MOVIE_API_URL = process.env.MOVIE_API_URL;
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';

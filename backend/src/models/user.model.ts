@@ -6,6 +6,7 @@ export interface IUser extends Document {
     email: string;
     password_hash: string;
     profilePicture?: string;
+    google_id?: string;
     createdAt: Date;
     updatedAt: Date;
     favorites_movies: string[];
@@ -41,6 +42,11 @@ const userSchema: Schema = new Schema({
     profilePicture: {
         type: String,
         default: 'https://example.com/default-profile-picture.png'
+    },
+    google_id: {
+        type: String,
+        unique: true,
+        sparse: true,
     },
     followers: [
         {
