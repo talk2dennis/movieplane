@@ -48,9 +48,7 @@ export default function UserProfilePage() {
                         {user.profilePicture ? (
                             <img src={user.profilePicture} alt={`${user.username}'s profile`} />
                         ) : (
-                            <div className="placeholder">
-                                <span>{`${user.username.charAt(0).toUpperCase()}${user.username.charAt(1).toUpperCase()}`}</span>
-                            </div>
+                            <span>{`${user.username.charAt(0).toUpperCase()}${user.username.charAt(1).toUpperCase()}`}</span>
                         )}
                     </div>
                 </div>
