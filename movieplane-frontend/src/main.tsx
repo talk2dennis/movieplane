@@ -5,7 +5,6 @@ import './index.css'
 import App from './App.tsx'
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
-console.log('Loaded Google Client ID:', GOOGLE_CLIENT_ID);
 if (!GOOGLE_CLIENT_ID) {
   console.error('Google Client ID is not set. Please check your environment variables.');
   throw new Error('Google Client ID is not set.');

@@ -4,7 +4,7 @@ import bycript from 'bcrypt';
 export interface IUser extends Document {
     username: string;
     email: string;
-    password_hash: string;
+    password_hash?: string;
     profilePicture?: string;
     google_id?: string;
     createdAt: Date;
@@ -35,13 +35,10 @@ const userSchema: Schema = new Schema({
     },
     password_hash: {
         type: String,
-        required: [true, 'Password is required'],
-        minlength: [6, 'Password must be at least 6 characters long'],
         select: false
     },
     profilePicture: {
-        type: String,
-        default: 'https://example.com/default-profile-picture.png'
+        type: String
     },
     google_id: {
         type: String,
@@ -83,8 +80,11 @@ userSchema.pre<IUser>('save', async function (next) {
     }
     try {
         const salt = await bycript.genSalt(15);
-        this.password_hash = await bycript.hash(this.password_hash, salt);
+        if (this.password_hash) {
+            this.password_hash = await bycript.hash(this.password_hash, salt);
+        }
         next();
+
     } catch (error: any) {
         next(error);
     }
