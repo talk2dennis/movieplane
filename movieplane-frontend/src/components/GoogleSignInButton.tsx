@@ -1,5 +1,6 @@
 import React from "react";
 import { GoogleLogin } from "@react-oauth/google";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import axiosClient from "../api/axiosClient";
 
@@ -9,8 +10,8 @@ interface GoogleSignInButtonProps {
 }
 
 const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ onSuccess, onError }) => {
-    const { login } = useAuth();
-
+    const { login, toast } = useAuth();
+    const navigate = useNavigate();
     const handleSuccess = async (credentialResponse: any) => {
         try {
             const res = await axiosClient.post<any>('/auth/google', {
@@ -18,12 +19,15 @@ const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ onSuccess, onEr
             });
             const { token, user } = res.data;
             login(token, user);
+            toast('Google Sign-In successful!', 'success');
+            // navigate to the home page after successful login
+            navigate('/');
 
             if (onSuccess) {
                 onSuccess();
             }
         } catch (error: any) {
-            console.error('Google Sign-In backend error:', error.response?.data || error.message);
+            toast(`Google Sign-In backend error:, ${error.response?.data?.message || 'An error occurred.'}`, 'error');
             if (onError) {
                 onError(error.response?.data?.message || 'Google Sign-In failed.');
             }
