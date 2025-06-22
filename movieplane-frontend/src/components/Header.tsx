@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 import {
   faSearch
 } from "@fortawesome/free-solid-svg-icons";
+import ProfilePicture from './ProfilePicture';
+
 
 export default function Header() {
   const { user, logout, isAuthenticated } = useAuth();
@@ -72,8 +74,11 @@ export default function Header() {
               Watchlist
               <span className='notification'> ({user?.watchlist_movies?.length ?? 0})</span>
             </NavLink>
-            <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">{user?.username}</span></NavLink>
+            <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">{user?.username.split('@')[0]}</span></NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>
+            <div style={{ width: '40px', height: '40px' }} >
+              <ProfilePicture imageUrl={user?.profilePicture ?? null} username={user?.username ?? ''} />
+            </div>
           </>
         )}
       </nav>

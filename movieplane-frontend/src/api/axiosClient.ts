@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const baseURL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5001/api';
-console.log('Axios Base URL:', baseURL);
+// console.log('Axios Base URL:', baseURL);
 
 const axiosClient = axios.create({
     baseURL,
@@ -13,7 +13,7 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
     (config) => {
-        console.log("Outgoing request:", config.method, config.url);
+        // console.log("Outgoing request:", config.method, config.url);
         if (typeof window !== 'undefined') {
             const token = localStorage.getItem('token');
             if (token) {

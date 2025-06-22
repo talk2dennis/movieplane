@@ -46,8 +46,8 @@ section {
 
 /* profile picture styles */
 .profile-picture {
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   border-radius: 50%;
   overflow: hidden;
   border: 1px solid tomato;

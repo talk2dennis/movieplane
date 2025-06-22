@@ -41,7 +41,11 @@ const GoogleSignInButton: React.FC<GoogleSignInButtonProps> = ({ onSuccess, onEr
         <GoogleLogin
             onSuccess={handleSuccess}
             onError={handleError}
-            useOneTap // Optional: for one-tap sign-in experience
+            logo_alignment="left"
+            containerProps={{ style: { width: '100%' } }}
+            text="continue_with"
+            theme="filled_blue"
+            shape="rectangular"
         />
     );
 }

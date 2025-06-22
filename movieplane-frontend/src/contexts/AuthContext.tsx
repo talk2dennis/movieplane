@@ -35,7 +35,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 const res = await axiosClient.get("/auth/me");
                 const data = res.data as { user: IUser };
                 setUser(data.user);
-                console.log("User loaded from token:", data.user);
+                // console.log("User loaded from token:", data.user);
             } catch (error) {
                 console.error("Failed to load user from token:", error);
                 logout(false);

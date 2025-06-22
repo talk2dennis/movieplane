@@ -2,6 +2,7 @@ import { useAuth } from '../contexts/AuthContext';
 import './css/UserProfilePage.css';
 import axiosClient from '../api/axiosClient';
 import MovieSection from '../components/RenderMovie';
+import ProfilePicture from '../components/ProfilePicture';
 
 
 export default function UserProfilePage() {
@@ -44,13 +45,7 @@ export default function UserProfilePage() {
             {/* Profile Info Section */}
             <section className="section profile-info" id="profile-info">
                 <div className="profile-picture">
-                    <div className="default-picture">
-                        {user.profilePicture ? (
-                            <img src={user.profilePicture} alt={`${user.username}'s profile`} />
-                        ) : (
-                            <span>{`${user.username.charAt(0).toUpperCase()}${user.username.charAt(1).toUpperCase()}`}</span>
-                        )}
-                    </div>
+                    <ProfilePicture imageUrl={user.profilePicture ?? null} username={user.username} />
                 </div>
                 <h1>{user.username}</h1>
                 <p>Email: {user.email}</p>
