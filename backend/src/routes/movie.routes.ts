@@ -4,7 +4,8 @@ import {
     getTrendingMovies, 
     searchMovies, 
     getMovieById,
-    getMovieRecommendations
+    getMovieRecommendations,
+    getSimilarMovies
 } from '../controllers/movie.controller';
 import { protect } from '../middleware/auth.middleware';
 
@@ -19,6 +20,7 @@ router.get('/trending', getTrendingMovies);
 router.get('/search', protect, searchMovies);
 router.get('/:movieId', protect, getMovieById);
 router.get('/:movieId/recommendations', protect, getMovieRecommendations);
+router.get('/:movieId/similar', protect, getSimilarMovies);
 
 
 export default router;
@@ -130,6 +132,32 @@ export default router;
  *         schema:
  *           type: string
  *         description: The ID of the movie for which to get recommendations
+ *     responses:
+ *       200:
+ *         description: Recommended movies
+ *       404:
+ *         description: Movie not found
+ *       401:
+ *         description: Unauthorized
+ *       500:
+ *         description: Internal server error
+ */
+
+/**
+ * @swagger
+ * /api/movies/{movieId}/similar:
+ *   get:
+ *     summary: Get similar movies based on a movie ID
+ *     tags: [Movies]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: movieId
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: The ID of the movie for which to get Similar movies
  *     responses:
  *       200:
  *         description: Recommended movies
