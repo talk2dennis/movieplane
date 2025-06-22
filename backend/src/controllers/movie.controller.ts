@@ -184,3 +184,30 @@ export const getMovieRecommendations = async (req: Request, res: Response, next:
     }
 };
 
+// get similar movies
+export const getSimilarMovies = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const movieId = parseInt(req.params.movieId);
+        if (isNaN(movieId)) {
+            return res.status(400).json({ message: 'Invalid movie ID.' });
+        }
+
+        const response = await axios.get(`${MOVIE_API_URL}/movie/${movieId}/similar`, {
+            params: {
+                api_key: MOVIE_API_KEY,
+            }
+        });
+        const tmdbSimilarMovies = response.data as { results: IMovie[] };
+        const similarMovies: IMovie[] = [];
+        for (const tmdbMovie of tmdbSimilarMovies.results) {
+            const movie = await fetchAndCacheMovieData(tmdbMovie.id);
+            if (movie) {
+                similarMovies.push(movie);
+            }
+        }
+        res.status(200).json(similarMovies);
+    } catch (error) {
+        next(error);
+    }
+};
+

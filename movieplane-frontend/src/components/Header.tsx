@@ -74,10 +74,9 @@ export default function Header() {
               Watchlist
               <span className='notification'> ({user?.watchlist_movies?.length ?? 0})</span>
             </NavLink>
-            <NavLink to={`/profile`} className="nav-link" onClick={() => setMenuOpen(false)}><span className="nav-link user-greeting">{user?.username.split('@')[0]}</span></NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>
-            <div style={{ width: '40px', height: '40px' }} >
-              <ProfilePicture imageUrl={user?.profilePicture ?? null} username={user?.username ?? ''} />
+            <div style={{ width: '40px', height: '40px' }} onClick={() => { window.location.href = '/profile'; }} >
+              <ProfilePicture imageUrl={user?.profilePicture ?? null} username={user?.username.split('@')[0] ?? ''} />
             </div>
           </>
         )}

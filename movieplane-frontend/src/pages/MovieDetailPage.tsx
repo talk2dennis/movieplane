@@ -14,6 +14,7 @@ const MovieDetailPage: React.FC = () => {
     const { movieId } = useParams();
     const [movie, setMovie] = useState<IMovie | null>(null);
     const [recommendedMovies, setRecommendedMovies] = useState<IMovie[]>([]);
+    const [similarMovies, setSimilarMovies] = useState<IMovie[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -41,6 +42,8 @@ const MovieDetailPage: React.FC = () => {
                 setLoading(true);
                 const res = await axiosClient.get<IMovie>(`movies/${movieId}`);
                 const recommendedRes = await axiosClient.get<IMovie[]>(`movies/${movieId}/recommendations`);
+                const similarRes = await axiosClient.get<IMovie[]>(`movies/${movieId}/similar`);
+                setSimilarMovies(similarRes.data || []);
                 setMovie(res.data);
                 setRecommendedMovies(recommendedRes.data || []);
             } catch (err) {
@@ -170,6 +173,12 @@ const MovieDetailPage: React.FC = () => {
                     </div>
                 </div>
             </div>
+
+            {similarMovies.length > 0 && (
+                <div className="recommended-section">
+                    <MovieSection title="Similar Movies" movies={similarMovies} />
+                </div>
+            )}
 
             {recommendedMovies.length > 0 && (
                 <div className="recommended-section">

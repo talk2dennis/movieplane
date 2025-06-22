@@ -40,6 +40,8 @@ export default function UserProfilePage() {
         window.location.href = '/login';
         return;
     } else localStorage.setItem("token", token || "");
+
+    
     return (
         <div className="profile-container">
             {/* Profile Info Section */}
