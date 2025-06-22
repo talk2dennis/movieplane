@@ -1,4 +1,5 @@
 import { useAuth } from '../contexts/AuthContext';
+import { useNavigate } from 'react-router-dom';
 import './css/UserProfilePage.css';
 import axiosClient from '../api/axiosClient';
 import MovieSection from '../components/RenderMovie';
@@ -6,7 +7,7 @@ import ProfilePicture from '../components/ProfilePicture';
 
 
 export default function UserProfilePage() {
-
+    const navigate = useNavigate();
     const { user, logout, isAuthenticated, token } = useAuth();
 
 
@@ -18,7 +19,7 @@ export default function UserProfilePage() {
                 const res = await axiosClient.delete('/users/delete');
                 if (res.status === 200) {
                     alert("Account deleted successfully.");
-                    window.location.href = '/login';
+                    navigate('/login');
                 }
             } catch (error) {
                 console.error("Failed to delete account:", error);
@@ -30,14 +31,14 @@ export default function UserProfilePage() {
 
     const handleEditProfile = () => {
         // Redirect to edit profile page
-        window.location.href = '/edit-profile';
+        navigate('/profile/edit');
     };
 
     if (!user || !isAuthenticated) {
         logout(); // Clear token and user data
         localStorage.removeItem("token");
         alert("You need to be logged in to view your profile.");
-        window.location.href = '/login';
+        navigate('/login');
         return;
     } else localStorage.setItem("token", token || "");
 

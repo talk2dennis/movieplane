@@ -8,6 +8,11 @@ interface AuthContextType {
     token: string | null;
     isAuthenticated: boolean;
     setUser: React.Dispatch<React.SetStateAction<IUser | null>>;
+    toast: (message: string, type: "success" | "error") => void;
+    toastMsg: {
+        message: string;
+        type: "success" | "error";
+    } | null;
     login: (token: string, user: IUser) => void;
     logout: () => void;
     loading: boolean;
@@ -19,6 +24,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<IUser | null>(null);
     const [token, setToken] = useState<string | null>(() => localStorage.getItem("token"));
     const [loading, setLoading] = useState<boolean>(true);
+    const [toastMsg, setToastMsg] = useState<{
+        message: string;
+        type: "success" | "error";
+    } | null>(null);
 
     useEffect(() => {
         // Load user from token when component mounts or token changes
@@ -38,7 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
                 // console.log("User loaded from token:", data.user);
             } catch (error) {
                 console.error("Failed to load user from token:", error);
-                logout(false);
+                logout();
             } finally {
                 setLoading(false);
             }
@@ -51,21 +60,22 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         localStorage.setItem("token", newToken);
         setToken(newToken);
         setUser(userData);
-        // redirect to homepage after successful login
-        window.location.href = "/"
     };
 
-    const logout = (redirect = true) => {
+    const logout = () => {
         localStorage.removeItem("token");
         setToken(null);
         setUser(null);
-        if (redirect) {
-            window.location.href = "/login";
-        }
+    };
+
+    const toast = (message: string, type: "success" | "error") => {
+        setToastMsg({ message, type });
+         // Clear toast after 3 seconds
+        setTimeout(() => setToastMsg(null), 10000);
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, token, isAuthenticated: !!user, login, logout, loading }}>
+        <AuthContext.Provider value={{ toast, toastMsg, user, setUser, token, isAuthenticated: !!user, login, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );

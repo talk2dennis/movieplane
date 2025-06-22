@@ -5,6 +5,7 @@ import type { IMovie } from '../types';
 import axiosClient from '../api/axiosClient';
 import Loading from '../components/Loading';
 import MovieSection from '../components/RenderMovie';
+import { useAuth } from '../contexts/AuthContext';
 
 
 
@@ -14,6 +15,7 @@ const HomePage: React.FC = () => {
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -58,13 +60,15 @@ const HomePage: React.FC = () => {
                 <div className="hero-content">
                     <h1>Welcome to MoviePlane</h1>
                     <p>Explore, discover, and enjoy the best of cinema.</p>
-                    <p>Create an account to add movies to your watchlist and favorites.</p>
-                    <button
-                        className="cta-button"
-                        onClick={() => navigate('/signup')}
-                    >
-                        Get Started
-                    </button>
+                    {!isAuthenticated && <>
+                        <p>Create an account to add movies to your watchlist and favorites.</p>
+                        <button
+                            className="cta-button"
+                            onClick={() => navigate('/signup')}
+                        >
+                            Get Started
+                        </button>
+                    </>}
                 </div>
             </div>
 

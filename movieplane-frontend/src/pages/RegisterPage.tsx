@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Loading from "../components/Loading";
 import GoogleSignInButton from "../components/GoogleSignInButton";
+import { useAuth } from "../contexts/AuthContext";
 import {
   faEye,
   faEyeSlash,
@@ -24,9 +25,13 @@ const RegisterPage: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const navigate = useNavigate();
+  const {toast, logout} = useAuth();
+
+  logout();
 
   const handleGoogleSignInError = (error: any) => {
     setError(error);
+    toast(error, "error");
   };
 
   // Handle input changes
@@ -93,11 +98,12 @@ const RegisterPage: React.FC = () => {
     try {
       const res = await axiosClient.post("/auth/register", form);
       if (res.status !== 201) throw new Error("Registration failed");
-      alert("Registration successful!");
+      toast("Registration successful!", "success");
       navigate("/login");
     } catch (error: any) {
       const fallback = "Registration failed. Please try again.";
       const messages = error.response?.data?.errors;
+      toast(messages || fallback, "error");
       if (Array.isArray(messages)) {
         setError(messages.map((e: { message: string }) => e.message).join("\n"));
       } else {

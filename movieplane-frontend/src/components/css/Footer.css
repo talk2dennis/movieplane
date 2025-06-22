@@ -1,0 +1,16 @@
+.footer-link {
+    color: #ffffff;
+    text-decoration: none;
+    padding: 3px;
+    margin: 5px;
+    font-size: 14px;
+
+    &:hover {
+        color: tomato;
+        background: #ffffff;
+        cursor: pointer;
+        margin: 5px;
+        border-radius: 5px;
+        transition: all 0.7s ease-in-out;
+    }
+}

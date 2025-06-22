@@ -1,6 +1,4 @@
-// MovieDetailPage.tsx
-
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { IMovie } from "../types";
 import MovieSection from "../components/RenderMovie";
@@ -18,7 +16,8 @@ const MovieDetailPage: React.FC = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
-    const { isAuthenticated, user, setUser } = useAuth();
+    const { isAuthenticated, user, setUser, toast } = useAuth();
+    const navigate = useNavigate();
 
     // function to check if movie is in favorites or watchlist
     const isInFavorites = (movieId: number) => {
@@ -35,8 +34,8 @@ const MovieDetailPage: React.FC = () => {
                 // check if user is authenticated
                 if (!isAuthenticated && !user) {
                     // // display message to user and redirect to homepage
-                    alert("You need to be logged in to view movie details.");
-                    window.location.href = "/";
+                    toast("You need to be logged in to view movie details.", "error");
+                    navigate("/");
                     return;
                 }
                 setLoading(true);
@@ -48,6 +47,7 @@ const MovieDetailPage: React.FC = () => {
                 setRecommendedMovies(recommendedRes.data || []);
             } catch (err) {
                 setError("Failed to load movie details.");
+                toast("Failed to load movie details.", "error");
             } finally {
                 setLoading(false);
             }
@@ -85,9 +85,9 @@ const MovieDetailPage: React.FC = () => {
                     };
                 });
             }
-            alert(res.data.message);
+            toast(res.data.message, "success");
         } catch (error) {
-            alert("Failed to add or remove movie to favorites");
+            toast("Failed to add or remove movie to favorites", "error");
         } finally {
             setLoading(false);
         }
@@ -122,10 +122,10 @@ const MovieDetailPage: React.FC = () => {
                     };
                 });
             }
-            alert(res.data.message);
+            toast(res.data.message, "success");
 
         } catch (error: any) {
-            alert(`Failed to add or remove movie to watchlist: ${error.message}`);
+            toast(`Failed to add or remove movie to watchlist: ${error.message}`, error);
         } finally {
             setLoading(false);
         }

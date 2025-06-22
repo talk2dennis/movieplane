@@ -129,6 +129,14 @@
   cursor: not-allowed;
 }
 
+.cancel {
+  background: wheat;
+  color: black;
+  &:hover {
+    background: #f0ad4e;
+  }
+}
+
 
 /* Footer */
 .footer-container {

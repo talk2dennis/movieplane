@@ -33,6 +33,7 @@ export default function Header() {
 
   const handleLogout = () => {
     logout();
+    navigate('/');
   };
 
 
@@ -75,7 +76,7 @@ export default function Header() {
               <span className='notification'> ({user?.watchlist_movies?.length ?? 0})</span>
             </NavLink>
             <button className="nav-link logout-btn" onClick={handleLogout}>Logout</button>
-            <div style={{ width: '40px', height: '40px' }} onClick={() => { window.location.href = '/profile'; }} >
+            <div style={{ width: '40px', height: '40px' }} onClick={() => { navigate('/profile'); }} >
               <ProfilePicture imageUrl={user?.profilePicture ?? null} username={user?.username.split('@')[0] ?? ''} />
             </div>
           </>

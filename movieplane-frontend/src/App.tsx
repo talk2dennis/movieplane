@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
+import Loading from './components/Loading';
 import './index.css';
 
 // Import pages
@@ -16,6 +17,8 @@ import AboutPage from './pages/About';
 import PrivacyPage from './pages/Privacy';
 import ContactPage from './pages/Contact';
 import Search from './pages/Search';
+import EditPage from './pages/EditProfile';
+import Message from './components/Message';
 
 interface PrivateRouteProps {
     children: React.ReactElement;
@@ -25,15 +28,24 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     const { isAuthenticated, loading } = useAuth();
 
     if (loading) {
-        return <div>Loading authentication...</div>;
+        return <Loading title="Loading user data..." />;
     }
 
     return isAuthenticated ? children : <Navigate to="/login" replace />;
 };
 
 const AppRoutes: React.FC = () => {
+    const {toastMsg } = useAuth();
+    if (toastMsg) console.log("Toast message:", toastMsg);
     return (
         <Router>
+            {/* Show message if exists */}
+            {toastMsg?.message && (
+                <Message
+                    message={toastMsg.message}
+                    type={toastMsg.type} />
+            )}
+            {/* Show loading state if auth is loading */}
             <Header />
             <Routes>
                 {/* Public Routes */}
@@ -50,6 +62,11 @@ const AppRoutes: React.FC = () => {
                 <Route path="/profile" element={
                     <PrivateRoute>
                         <UserProfilePage />
+                    </PrivateRoute>
+                } />
+                <Route path="/profile/edit" element={
+                    <PrivateRoute>
+                        <EditPage />
                     </PrivateRoute>
                 } />
                 <Route path="/movie/:movieId" element={

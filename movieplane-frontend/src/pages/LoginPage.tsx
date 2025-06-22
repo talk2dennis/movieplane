@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axiosClient from "../api/axiosClient";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import type { IUser } from "../types";
 import "./css/LoginPage.css";
@@ -50,7 +51,14 @@ const LoginPage = () => {
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
 
-    const { login } = useAuth();
+    const { login, logout, toast } = useAuth();
+    const navigate = useNavigate();
+
+    // Redirect to home if user is already logged in    
+    useEffect(() => {
+        logout();
+    }, []);
+
     useEffect(() => {
         // Clear error when email or password changes
         setError("");
@@ -63,7 +71,8 @@ const LoginPage = () => {
         setError("");
 
         if (!email || !password) {
-            setError("Email and password are required");
+            toast("Please fill in all fields", "error");
+            setError("Please fill in all fields");
             setLoading(false);
             return;
         }
@@ -78,8 +87,12 @@ const LoginPage = () => {
         try {
             await loginUser(email, password, login);
             setLoading(false);
+            toast("Login was successful", "success");
+            // Redirect to home page after successful login
+            navigate("/");
         } catch (err: any) {
             setError(err.message);
+            toast(err.message, 'error');
             console.error("Login error:", err);
             setLoading(false);
         }

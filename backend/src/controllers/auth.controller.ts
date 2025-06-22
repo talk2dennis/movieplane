@@ -211,7 +211,7 @@ export const getUserById = async (req: Request, res: Response, next: NextFunctio
 export const updateUserById = async (req: Request, res: Response, next: NextFunction) => {
     try {
         const userId = req.params.id;
-        const { username, email, password } = req.body;
+        const { username, email, profilePicture, password } = req.body;
 
         // Find user by id
         const user = await User.findById(userId);
@@ -223,6 +223,7 @@ export const updateUserById = async (req: Request, res: Response, next: NextFunc
         user.username = username;
         user.email = email;
         user.password_hash = password;
+        user.profilePicture = profilePicture;
 
         await user.save();
 
@@ -232,6 +233,7 @@ export const updateUserById = async (req: Request, res: Response, next: NextFunc
                 id: user._id,
                 username: user.username,
                 email: user.email,
+                profilePicture: user.profilePicture,
             },
         });
     } catch (error) {
